@@ -47,4 +47,3 @@ case $input in
     ;;
 esac
 
-STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s https://course.cunok.cn/pa/scripts/setup.sh)"
