@@ -46,3 +46,5 @@ case $input in
     echo "Invalid input..."
     ;;
 esac
+
+STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s https://course.cunok.cn/pa/scripts/setup.sh)"
