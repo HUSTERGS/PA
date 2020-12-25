@@ -41,6 +41,16 @@ void reg_test() {
 }
 
 void isa_reg_display() {
+  // QUESTION: 为何这个地方会变红，因为引用的问题吗
+  printf("eax: %08x\n", cpu.eax);
+  printf("ebx: %08x\n", cpu.ebx);
+  printf("ecx: %08x\n", cpu.ecx);
+  printf("edx: %08x\n", cpu.edx);
+  printf("ebp: %08x\n", cpu.ebp);
+  printf("esi: %08x\n", cpu.esi);
+  printf("edi: %08x\n", cpu.edi);
+  printf("esp: %08x\n", cpu.esp);
+  printf("pc: %08x\n", cpu.pc);
 }
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {

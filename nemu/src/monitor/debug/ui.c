@@ -38,6 +38,101 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+// 单步执行
+static int cmd_si(char * args);
+
+// 打印程序状态
+static int cmd_info(char * args);
+
+// 表达式求值
+static int cmd_exp(char * args);
+
+// 扫描内存
+static int cmd_scan(char * args);
+
+// 设置监视点
+static int cmd_setwp(char * args);
+
+// 移除监视点
+static int cmd_rmwp(char * args);
+
+// 扫描内存
+static int cmd_scan(char * args) {
+  // `x N EXPR` 如 x 10 $esp
+  // 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节
+  // TODO: 先实现一个简单的版本，规定EXPR只能是一个十六进制数
+  char * N_str = strtok(NULL, " ");
+  char * EXPR_str = strtok(NULL, " ");
+  if (N_str && EXPR_str) {
+    // 分别读取N和EXPR
+    long N = strtol(N_str, NULL, 10);
+    long EXPR =  strtol(EXPR_str, NULL, 16);
+    Log("cmd_scan: x %ld 0x%08x\n", EXPR);
+    long count = 0;
+    for (long offset = 0; offset < N; offset++) {
+      printf("0x");
+      for (int i = 0; i < 4; i++) {
+        // 每四个字节为一组
+        printf("%02x", pmem[EXPR + offset * 4 + i]);
+        count++;
+      }
+      printf(" ");
+      // 每8组换一行
+      if (count !=0 && count % 8 == 0) {
+        printf("\n");
+      }
+    }
+
+  } else {
+    Log("cmd_scan: 格式有问题:  %s\n", args);
+  }
+}
+
+static int cmd_si(char * args) {
+  // 单步执行，唯一参数为一个正整数，如果args为NULL，则默认步进为1
+  long steps = 1;
+  // 暂时不考虑输入的数字有误的情况
+  // IMPROVE: 根据man手册里面的内容严格判断是否是数字
+  if (args != NULL) {
+    // strtol函数会自动去除数字之后有问题的字符
+    steps = strtol(args, NULL, 10);
+  }
+  if (steps > 0) {
+    cpu_exec(steps);
+  } else {
+    Log("cmd_si: 单步执行输入的数字 = %d < 0\n", steps);
+  }
+  return 0;
+}
+
+// 打印程序状态
+static int cmd_info(char * args) {
+  // IMPROVE: 测试是否可以直接通过*args来获取第一个字符，而不使用strtok函数
+  // 获取info后面的r/w
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    // QUESTION: 如果直接按回车args会是空吗
+    Log("cmd_info: 输入参数为NULL\n");
+    return 0;
+  }
+
+  if (strcmp(arg, "r") == 0) {
+    // 输入的参数是r，表示打印寄存器的值
+    isa_reg_display();
+  } else if (strcmp(arg, "w") == 0) {
+    // 打印监视点的值
+    // TODO: 打印监视点的值
+  } else {
+    Log("cmd_info: 未知命令\n");
+  }
+  return 0;
+}
+
+
+static int cmd_exp(char * args) {
+  
+}
+
 static struct {
   char *name;
   char *description;
@@ -46,7 +141,12 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si", "Single step", cmd_si},
+  { "info", "Show info of regs/watchpoint", cmd_info},
+  { "p", "Evaluate given expression", cmd_exp},
+  { "x", "Scan memory", cmd_scan},
+  { "w", "Set watchpoint", cmd_setwp},
+  { "d", "Remove watchpoint", cmd_rmwp},
   /* TODO: Add more commands */
 
 };
@@ -55,9 +155,10 @@ static struct {
 
 static int cmd_help(char *args) {
   /* extract the first argument */
+  // strtok函数第一次调用的时候会传入args，之后对于同一个str就需要传入NULL
   char *arg = strtok(NULL, " ");
   int i;
-
+  // args是从"help"开始的第一个字符串，表示help要查询的具体的指令
   if (arg == NULL) {
     /* no argument given */
     for (i = 0; i < NR_CMD; i ++) {
