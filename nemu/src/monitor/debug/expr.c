@@ -13,6 +13,9 @@ enum {
   TK_DECI_NUM, // 十进制数字
   TK_HEX_NUM, // 十六进制数字
   TK_REG, // 寄存器
+  TK_DEREF, //解引用
+  TK_NTEQ,
+  TK_AND,
   /* TODO: Add more token types */
 
 };
@@ -31,6 +34,8 @@ static struct rule {
   {"/", '/'},           // divide
   {"\\+", '+'},         // plus
   {"==", TK_EQ},         // equal
+  {"!=", TK_NTEQ},      // not equal
+  {"&&", TK_AND},       // and &&
   // FIXME: 不知道对于小括号的判断是不是正确的
   {"\\(", '('},
   {"\\)", ')'},
@@ -122,15 +127,33 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool deref_match(int type) {
+  char * str = '+-*/()';
+  for (int i = 0; i < strlen(str); i++) {
+    if (type == str[i]) {
+      return true;
+    }
+  }
+  return type == TK_DEREF || type == TK_EQ || type == TK_NTEQ || type == TK_AND;
+}
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
+  // 先从头遍历一遍，把解引用处理掉
+  for (int i = 0; i < nr_token; i++) {
+    // 如果i本身是一个乘号，然后前一个符号的类型是 +-*/或者TK_DEREF
+    if (tokens[i].type == '*' && (i == 0 || deref_match(tokens[i - 1].type))) {
+      tokens[i].type = TK_DEREF;
+    }
+  }
+  
 
   /* TODO: Insert codes to evaluate the expression. */
   uint32_t result = eval(0, nr_token-1, success);
-  
+
   return result;
 }
 
@@ -171,7 +194,6 @@ bool check_parentheses(int p, int q, bool *bad) {
 int main_op(int p, int q) {
 
   int backup = -1;
-  int flag = false;
   for (int i = q; i >= p; i--) {
     if (tokens[i].type == ')') {
       int count = 1;
@@ -189,19 +211,56 @@ int main_op(int p, int q) {
     Assert(tokens[i].type == '(', "main_op: 括号应该对应");
     // 找到了对应的另一个括号，位置为i，括号中间的不可能为主运算符号
     // 如果是加号或者减号，那么必定为主符号
-    if (tokens[i].type == '+' || tokens[i].type == '-') {
-      return i;
-    }
-    // 如果是 * / 那么就先存起来，遍历一遍之后都没有找到那么就返回backup
-    // TODO: 处理解引用的情况
     // TODO: 处理减号和负号的情况
-    if ((tokens[i].type == '*' || tokens[i].type == '/') && !flag) {
+
+    // 根据优先级来依次进行判断
+    // && 
+    if (tokens[i].type == TK_AND) {
+      // 如果是&& 则必为主运算符
       backup = i;
-      flag = true;
+    } else if (tokens[i].type == TK_EQ || tokens[i].type == TK_NTEQ) {
+      if (backup != -1 && tokens[backup].type == TK_AND) {
+        continue;
+      }
+      backup = i;
+    } else if (tokens[i].type == '+' || tokens[i].type == '-') {
+      if (backup != -1 && (
+        tokens[backup].type == TK_AND || 
+        tokens[backup].type == TK_EQ ||
+        tokens[backup].type == TK_NTEQ 
+      )) {
+        continue;
+      }
+      backup = i;
+    } else if (tokens[i].type == '*' || tokens[i].type == '/') {
+      if (backup != -1 && (
+        tokens[backup].type == TK_AND || 
+        tokens[backup].type == TK_EQ ||
+        tokens[backup].type == TK_NTEQ ||
+        tokens[backup].type == '+' ||
+        tokens[backup].type == '-'
+      )) {
+        continue;
+      }
+      backup = i;
+    } else if (tokens[i].type == TK_DEREF) {
+      // 如果有多个解引用，先计算第一个遇到的，也就是从右往左第一个
+      if (backup != -1 && (
+        tokens[backup].type == TK_AND || 
+        tokens[backup].type == TK_EQ ||
+        tokens[backup].type == TK_NTEQ ||
+        tokens[backup].type == '+' ||
+        tokens[backup].type == '-' || 
+        tokens[backup].type == '*' ||
+        tokens[backup].type == '/'
+      )) {
+        continue;
+      }
+      backup = i;
     }
   }
-  assert(flag == true);
 
+  Assert(backup != -1, "最终计算结果应该始终存在");
   return backup;
 }
 
@@ -241,6 +300,28 @@ uint32_t eval(int p, int q, bool *success) {
       return -1;
     }
     int op = main_op(p, q);
+
+    if (tokens[op].type == TK_DEREF) {
+      // 如果是解引用
+      Assert(op == p, "如果main_op计算的结果为解引用，那么解引用必然是第一个");
+      uint32_t address = eval(p+1, q, success);
+      if (*success == false) {
+        Log("main_op: 解引用失败");
+        return -1;
+      } else if (address < 0 || address > PMEM_SIZE - 4) {
+        *success = false;
+        Log("解引用操作超出内存范围");
+        return -1;
+      } else {
+        // FIXME: 检查这个地方是否有问题
+        return isa_vaddr_read(address, 4);
+        // return pmem[address] | 
+        // (uint32_t)pmem[address+1] << 8 |
+        // (uint32_t)pmem[address+2] << 16 |
+        // (uint32_t)pmem[address+3] << 24;
+      }
+    }
+
     uint32_t val1 = eval(p, op - 1, success);
     if (*success == false) {
       Log("main_op: 求第一个子表达式出错");
@@ -257,6 +338,9 @@ uint32_t eval(int p, int q, bool *success) {
     case '-': return val1 - val2;
     case '*': return val1 * val2;
     case '/': return val1 / val2;
+    case TK_EQ: return val1 == val2;
+    case TK_NTEQ: return val1 != val2;
+    case TK_AND:  return val1 && val2;
     default:
       panic("eval: main_op 监测到其他符号");
     }
