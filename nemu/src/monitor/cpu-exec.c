@@ -61,7 +61,10 @@ void cpu_exec(uint64_t n) {
   log_clearbuf();
 
     /* TODO: check watchpoints here. */
-
+  if (check_wps()) {
+    nemu_state.state = NEMU_STOP;
+    printf("监视点被触发\n");
+  }
 #endif
 
   g_nr_guest_instr ++;

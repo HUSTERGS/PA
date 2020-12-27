@@ -151,7 +151,6 @@ uint32_t expr(char *e, bool *success) {
   }
   
 
-  /* TODO: Insert codes to evaluate the expression. */
   uint32_t result = eval(0, nr_token-1, success);
 
   return result;
@@ -212,7 +211,7 @@ int main_op(int p, int q) {
     // 找到了对应的另一个括号，位置为i，括号中间的不可能为主运算符号
     // 如果是加号或者减号，那么必定为主符号
     // TODO: 处理减号和负号的情况
-
+    // IMPROVE: 通过定义别名的优先级来，并通过减法来简化以下if判断
     // 根据优先级来依次进行判断
     // && 
     if (tokens[i].type == TK_AND) {

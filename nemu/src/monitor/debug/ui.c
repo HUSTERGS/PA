@@ -60,13 +60,20 @@ static int cmd_rmwp(char * args);
 static int cmd_scan(char * args) {
   // `x N EXPR` 如 x 10 $esp
   // 求出表达式EXPR的值, 将结果作为起始内存地址, 以十六进制形式输出连续的N个4字节
-  // TODO: 先实现一个简单的版本，规定EXPR只能是一个十六进制数
   char * N_str = strtok(NULL, " ");
-  char * EXPR_str = strtok(NULL, " ");
+  
+  // 分割点设置为""将取得后续的所有字符串
+  char * EXPR_str = strtok(NULL, "");
   if (N_str && EXPR_str) {
     // 分别读取N和EXPR
     long N = strtol(N_str, NULL, 10);
-    long EXPR =  strtol(EXPR_str, NULL, 16);
+    // long EXPR =  strtol(EXPR_str, NULL, 16);
+    bool success = false;
+    uint32_t EXPR = expr(EXPR_str, &success);
+    if (!success) {
+      Log("cmd_scan: 求值失败");
+      return ;
+    }
     Log("cmd_scan: x %ld 0x%08x\n", EXPR);
     long count = 0;
     for (long offset = 0; offset < N; offset++) {
@@ -121,16 +128,33 @@ static int cmd_info(char * args) {
     isa_reg_display();
   } else if (strcmp(arg, "w") == 0) {
     // 打印监视点的值
-    // TODO: 打印监视点的值
+    print_wps();
   } else {
     Log("cmd_info: 未知命令\n");
   }
   return 0;
 }
 
+// 创建监视点
+static int cmd_setwp(char * args) {
+  if (!new_wp(args)) {
+    Log("cmd_setwp: 监视点创建失败\n");
+  }
+}
+// 移除监视点
+static int cmd_rmwp(char * args) {
+  rm_wp(strtol(args, NULL, 10));
+}
 
 static int cmd_exp(char * args) {
-  
+  bool success = false;
+  uint32_t result = expr(args, &success);
+  if (success) {
+    printf("结果为%d", result);
+    return;
+  }
+  Log("cmd_exp: 求值失败");
+  return -1;
 }
 
 static struct {
