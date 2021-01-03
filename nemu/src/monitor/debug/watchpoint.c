@@ -60,10 +60,10 @@ WP * new_wp(char * e) {
 }
 
 void free_wp(WP *wp) {
-  if (wp->expr) {
-    free(wp->expr);
-    wp->expr = NULL;
-  }
+  // if (wp->expr) {
+  //   free(wp->expr);
+  //   wp->expr = NULL;
+  // }
   if (!head) {
     Log("free_wp: 重复释放监视点，操作已取消");
     return;

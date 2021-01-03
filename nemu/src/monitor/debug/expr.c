@@ -337,6 +337,7 @@ uint32_t eval(int p, int q, bool *success) {
       panic("eval: main_op 监测到其他符号");
     }
   }
+  return -1;
 }
 
 uint32_t expr(char *e, bool *success) {
