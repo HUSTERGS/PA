@@ -191,7 +191,7 @@ int main_op(int p, int q) {
         }
       }
     }
-    Assert(tokens[i].type == '(', "main_op: 括号应该对应");
+    // Assert(tokens[i].type == '(', "main_op: 括号应该对应");
     // 找到了对应的另一个括号，位置为i，括号中间的不可能为主运算符号
     // 如果是加号或者减号，那么必定为主符号
     // TODO: 处理减号和负号的情况
