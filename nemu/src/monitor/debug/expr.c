@@ -248,9 +248,6 @@ int main_op(int p, int q) {
 }
 
 uint32_t eval(int p, int q, bool *success) {
-  for (int i = p; i++; i < q) {
-    Log("%d ", tokens[i].type);
-  }
   bool bad = false;
   if (p > q) {
     *success = false;
@@ -261,6 +258,7 @@ uint32_t eval(int p, int q, bool *success) {
     {
     case TK_DECI_NUM:
       // 如果是10进制
+      Log("十进制");
       return strtol(tokens[p].str, NULL, 10);
     case TK_HEX_NUM:
       // 如果是16进制
