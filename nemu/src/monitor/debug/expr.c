@@ -114,7 +114,9 @@ static bool make_token(char *e) {
           
         }
         // 设定type
-        tokens[nr_token++].type = rules[i].token_type;
+        if (rules[i].token_type != TK_NOTYPE) {
+          tokens[nr_token++].type = rules[i].token_type;
+        }
         break;
       }
     }
