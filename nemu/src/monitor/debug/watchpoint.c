@@ -38,6 +38,7 @@ WP * new_wp(char * e) {
     head->expr = e;
     head->prev_value = cur_val;
     head->just_init = true;
+    return head;
     // if (head) {
     //   WP * temp = head;
     //   while (temp->next) {
