@@ -37,7 +37,7 @@ WP * new_wp(char * e) {
     head = temp;
 
     head->expr = (char *)malloc(sizeof(char) * (1 + strlen(e)));
-    strcpyn(head->expr, e, (1+strlen(e)));
+    strncpy(head->expr, e, (1+strlen(e)));
     head->prev_value = cur_val;
     head->just_init = true;
     return head;
