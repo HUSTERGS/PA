@@ -23,6 +23,7 @@ WP * new_wp(char * e) {
   // 如果还有空节点
   // 新的节点从链表的头部插入，可以避免对head的判断
   bool success = false;
+  Log("新建的监视点的value为%s", e);
   uint32_t cur_val = expr(e, &success);
   if (!success) {
     Log("new_wp: 监视点对应的表达式有误，创建取消\n");
