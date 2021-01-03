@@ -72,9 +72,9 @@ static int cmd_scan(char * args) {
     uint32_t EXPR = expr(EXPR_str, &success);
     if (!success) {
       Log("cmd_scan: 求值失败");
-      return ;
+      return -1;
     }
-    Log("cmd_scan: x %ld 0x%08x\n", EXPR);
+    Log("cmd_scan: x %ld 0x%08x\n", N,  EXPR);
     long count = 0;
     for (long offset = 0; offset < N; offset++) {
       printf("0x");
@@ -89,10 +89,11 @@ static int cmd_scan(char * args) {
         printf("\n");
       }
     }
-
+    return 0;
   } else {
     Log("cmd_scan: 格式有问题:  %s\n", args);
   }
+  return -1;
 }
 
 static int cmd_si(char * args) {
@@ -107,7 +108,7 @@ static int cmd_si(char * args) {
   if (steps > 0) {
     cpu_exec(steps);
   } else {
-    Log("cmd_si: 单步执行输入的数字 = %d < 0\n", steps);
+    Log("cmd_si: 单步执行输入的数字 = %ld < 0\n", steps);
   }
   return 0;
 }
@@ -139,11 +140,14 @@ static int cmd_info(char * args) {
 static int cmd_setwp(char * args) {
   if (!new_wp(args)) {
     Log("cmd_setwp: 监视点创建失败\n");
+    return -1;
   }
+  return 0;
 }
 // 移除监视点
 static int cmd_rmwp(char * args) {
   rm_wp(strtol(args, NULL, 10));
+  return 0;
 }
 
 static int cmd_exp(char * args) {
@@ -151,7 +155,7 @@ static int cmd_exp(char * args) {
   uint32_t result = expr(args, &success);
   if (success) {
     printf("结果为%d", result);
-    return;
+    return 0;
   }
   Log("cmd_exp: 求值失败");
   return -1;
