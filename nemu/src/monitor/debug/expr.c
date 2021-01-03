@@ -258,15 +258,17 @@ uint32_t eval(int p, int q, bool *success) {
     {
     case TK_DECI_NUM:
       // 如果是10进制
-      Log("十进制");
+      *success = true;
       return strtol(tokens[p].str, NULL, 10);
     case TK_HEX_NUM:
       // 如果是16进制
+      *success = true;
       return strtol(tokens[p].str, NULL, 16);
     case TK_REG:  {
       bool success_reg = false;
       uint32_t reg_val = isa_reg_str2val(tokens[p].str, &success_reg);
       if (success_reg) {
+        *success = true;
         return reg_val;
       }
       Log("寄存器求值失败");
@@ -300,6 +302,7 @@ uint32_t eval(int p, int q, bool *success) {
         return -1;
       } else {
         // FIXME: 检查这个地方是否有问题
+        *success = true;
         return isa_vaddr_read(address, 4);
         // return pmem[address] | 
         // (uint32_t)pmem[address+1] << 8 |
@@ -318,6 +321,7 @@ uint32_t eval(int p, int q, bool *success) {
       Log("main_op: 求第二个子表达式出错");
       return -1;
     }
+    *success = true;
     switch (tokens[op].type)
     {
     case '+': return val1 + val2;
