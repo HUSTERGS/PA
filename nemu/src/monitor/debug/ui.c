@@ -127,6 +127,7 @@ static int cmd_info(char * args) {
 
   if (strcmp(arg, "r") == 0) {
     // 输入的参数是r，表示打印寄存器的值
+    Log("打印参数点");
     isa_reg_display();
   } else if (strcmp(arg, "w") == 0) {
     // 打印监视点的值
