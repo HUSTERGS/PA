@@ -117,6 +117,7 @@ static int cmd_si(char * args) {
 static int cmd_info(char * args) {
   // IMPROVE: 测试是否可以直接通过*args来获取第一个字符，而不使用strtok函数
   // 获取info后面的r/w
+  Log("进入info");
   char *arg = strtok(NULL, " ");
   if (arg == NULL) {
     // QUESTION: 如果直接按回车args会是空吗
