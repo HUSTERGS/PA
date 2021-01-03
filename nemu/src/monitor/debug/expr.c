@@ -248,6 +248,9 @@ int main_op(int p, int q) {
 }
 
 uint32_t eval(int p, int q, bool *success) {
+  for (int i = p; i++; i < q) {
+    printf("%d ", tokens[i].type);
+  }
   bool bad = false;
   if (p > q) {
     *success = false;
