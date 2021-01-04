@@ -183,7 +183,7 @@ int main_op(int p, int q) {
     if (tokens[i].type == ')') {
       Log("监测到反括号%d，开始跳过\n", i);
       int count = 1;
-      while (--i >= q) {
+      while (--i >= p) {
         if (tokens[i].type == ')') {
           count++;
         } else if (tokens[i].type == '(') {
