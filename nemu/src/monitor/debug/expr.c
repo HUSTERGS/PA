@@ -253,8 +253,8 @@ int main_op(int p, int q) {
     }
   }
 
-  Assert(backup != -1, "最终计算结果应该始终存在");
-  Log("main_op为%d\n", tokens[backup].type);
+  // Assert(backup != -1, "最终计算结果应该始终存在");
+  // Log("main_op为%d\n", tokens[backup].type);
   return backup;
 }
 
@@ -300,6 +300,11 @@ uint32_t eval(int p, int q, bool *success) {
       return -1;
     }
     int op = main_op(p, q);
+    if (op == -1) {
+      *success = false;
+      Log("求值失败");
+      return -1;
+    }
     Log("op位置为%d\n", op);
     if (tokens[op].type == TK_DEREF) {
       // 如果是解引用
