@@ -40,8 +40,8 @@ static struct rule {
   // FIXME: 不知道对于小括号的判断是不是正确的
   {"\\(", '('},
   {"\\)", ')'},
-  {"[0-9]+", TK_DECI_NUM},           // decimal nums
   {"0x[0-9a-f]+", TK_HEX_NUM},          // hex nums
+  {"[0-9]+", TK_DECI_NUM},           // decimal nums
   {"\\$[a-zA-Z]{2,3}", TK_REG}, // 寄存器名应该只能是2-3长度的
 };
 
