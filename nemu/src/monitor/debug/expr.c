@@ -290,6 +290,7 @@ uint32_t eval(int p, int q, bool *success) {
       break;
     }
   } else if (check_parentheses(p, q, &bad) == true && !bad) {
+    Log("括号匹配\n");
     return eval(p+1, q-1, success);
   } else {
     if (bad) {
