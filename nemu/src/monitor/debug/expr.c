@@ -209,6 +209,7 @@ int main_op(int p, int q) {
       }
       backup = i;
     } else if (tokens[i].type == '+' || tokens[i].type == '-') {
+      Log("进入这个分支\n");
       if (backup != -1 && (
         tokens[backup].type == TK_AND || 
         tokens[backup].type == TK_EQ ||
