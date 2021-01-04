@@ -291,7 +291,7 @@ uint32_t eval(int p, int q, bool *success) {
       return -1;
     }
     int op = main_op(p, q);
-
+    Log("op位置为%d\n", op);
     if (tokens[op].type == TK_DEREF) {
       // 如果是解引用
       Assert(op == p, "如果main_op计算的结果为解引用，那么解引用必然是第一个");
