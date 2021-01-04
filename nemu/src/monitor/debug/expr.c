@@ -181,7 +181,7 @@ int main_op(int p, int q) {
   int backup = -1;
   for (int i = q; i >= p; i--) {
     if (tokens[i].type == ')') {
-      // Log("监测到反括号%d，开始跳过\n", i);
+      Log("监测到反括号%d，开始跳过\n", i);
       int count = 1;
       while (--i >= p) {
         if (tokens[i].type == ')') {
@@ -189,7 +189,7 @@ int main_op(int p, int q) {
         } else if (tokens[i].type == '(') {
           count--;
         }
-        // Log("当前count = %d\n", count);
+        Log("当前count = %d\n", count);
         if (count == 0) {
           break;
         }
@@ -211,7 +211,7 @@ int main_op(int p, int q) {
       }
       backup = i;
     } else if (tokens[i].type == '+' || tokens[i].type == '-') {
-      // Log("进入这个分支\n");
+      Log("进入这个分支\n");
       if (backup != -1 && (
         tokens[backup].type == TK_AND || 
         tokens[backup].type == TK_EQ ||
@@ -246,13 +246,13 @@ int main_op(int p, int q) {
       }
       backup = i;
     }
-    // if (backup != -1) {
-    //   Log("这一轮循环的的main_op为%d，位置为%d\n", tokens[backup].type, backup);
-    // }
+    if (backup != -1) {
+      Log("这一轮循环的的main_op为%d，位置为%d\n", tokens[backup].type, backup);
+    }
   }
 
   Assert(backup != -1, "最终计算结果应该始终存在");
-  // Log("main_op为%d\n", tokens[backup].type);
+  Log("main_op为%d\n", tokens[backup].type);
   return backup;
 }
 
@@ -297,7 +297,7 @@ uint32_t eval(int p, int q, bool *success) {
       return -1;
     }
     int op = main_op(p, q);
-    // Log("op位置为%d\n", op);
+    Log("op位置为%d\n", op);
     if (tokens[op].type == TK_DEREF) {
       // 如果是解引用
       Assert(op == p, "如果main_op计算的结果为解引用，那么解引用必然是第一个");
