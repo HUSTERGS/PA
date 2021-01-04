@@ -243,7 +243,9 @@ int main_op(int p, int q) {
       }
       backup = i;
     }
-    Log("这一轮循环的的main_op为%d，位置为%d\n", tokens[i].type, i);
+    if (backup != -1) {
+      Log("这一轮循环的的main_op为%d，位置为%d\n", tokens[backup].type, backup);
+    }
   }
 
   Assert(backup != -1, "最终计算结果应该始终存在");
