@@ -177,9 +177,10 @@ bool check_parentheses(int p, int q, bool *bad) {
 // 寻找p,q之间的主符号
 // 从右向左找
 int main_op(int p, int q) {
-
+  Log("p = %d, q = %d\n", p, q);
   int backup = -1;
   for (int i = q; i >= p; i--) {
+    Log("i.type = %d", tokens[i].type);
     if (tokens[i].type == ')') {
       Log("监测到反括号%d，开始跳过\n", i);
       int count = 1;
