@@ -131,7 +131,7 @@ static bool make_token(char *e) {
 }
 
 bool deref_match(int type) {
-  char * str = "+-*/()";
+  char * str = "+-*/(";
   for (int i = 0; i < strlen(str); i++) {
     if (type == str[i]) {
       return true;
