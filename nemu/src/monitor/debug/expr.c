@@ -163,8 +163,9 @@ bool check_parentheses(int p, int q, bool *bad) {
         *bad = true;
       }
       // 找到与左侧括号对应的括号，如果不是最后一个说明最后一个不匹配
-      if (count == 0 && j == q) {
-        result = true;
+      if (count == 0) {
+        result = j == q;
+        break;
       }
     }
     if (count != 0) {
