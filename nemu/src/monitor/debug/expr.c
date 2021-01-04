@@ -246,6 +246,7 @@ int main_op(int p, int q) {
   }
 
   Assert(backup != -1, "最终计算结果应该始终存在");
+  Log("main_op为%d\n", tokens[backup].type);
   return backup;
 }
 
