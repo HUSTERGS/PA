@@ -181,6 +181,7 @@ int main_op(int p, int q) {
   int backup = -1;
   for (int i = q; i >= p; i--) {
     if (tokens[i].type == ')') {
+      Log("监测到反括号%d，开始跳过\n", i);
       int count = 1;
       while (--i >= q) {
         if (tokens[i].type == ')') {
@@ -188,6 +189,7 @@ int main_op(int p, int q) {
         } else if (tokens[i].type == '(') {
           count--;
         }
+        Log("当前count = %d\n", count);
         if (count == 0) {
           break;
         }
