@@ -361,7 +361,8 @@ uint32_t expr(char *e, bool *success) {
     }
   }
   
-
+  Log("共有%d个符号\n",nr_token);
+  
   uint32_t result = eval(0, nr_token-1, success);
 
   return result;
