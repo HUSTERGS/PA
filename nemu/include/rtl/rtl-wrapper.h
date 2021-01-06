@@ -5,7 +5,7 @@
 
 #define RTL_PREFIX interpret
 
-#define rtl_li        concat(RTL_PREFIX, _rtl_li      ) // 
+#define rtl_li        concat(RTL_PREFIX, _rtl_li      )
 #define rtl_mv        concat(RTL_PREFIX, _rtl_mv      )
 #define rtl_add       concat(RTL_PREFIX, _rtl_add     )
 #define rtl_sub       concat(RTL_PREFIX, _rtl_sub     )
