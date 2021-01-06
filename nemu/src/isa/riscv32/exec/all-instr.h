@@ -22,7 +22,7 @@ make_EHelper(slli);
 make_EHelper(sr_li_ai);
 
 
-// R
+// R basic
 make_EHelper(add_sub);
 make_EHelper(sll);
 make_EHelper(slt);
@@ -31,6 +31,15 @@ make_EHelper(xor);
 make_EHelper(slr_sra);
 make_EHelper(or);
 make_EHelper(and);
+// R M
+make_EHelper(mul);
+make_EHelper(mulh);
+make_EHelper(mulhsu);
+make_EHelper(mulhu);
+make_EHelper(div);
+make_EHelper(divu);
+make_EHelper(rem);
+make_EHelper(remu);
 
 // U
 make_EHelper(auipc);

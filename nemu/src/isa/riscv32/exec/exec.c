@@ -72,9 +72,25 @@ static OpcodeEntry r_table [8] = {
   EX(add_sub), EX(sll), EX(slt), EX(sltu), EX(xor), EX(slr_sra), EX(or), EX(and)
 };
 
+/** 用于RV32M中的R指令
+ * mul    000
+ * mulh   001
+ * mulhsu 010
+ * mulhu  011
+ * div    100
+ * divu   101
+ * rem    110
+ * remu   111
+ */
+static OpcodeEntry r_m_table[8] {
+  EX(mul), EX(mulh), EX(mulhsu), EX(mulhu), EX(div), EX(divu), EX(rem), EX(remu)
+};
+
 static make_EHelper(r) {
   decinfo.width = imm_table[decinfo.isa.instr.funct3].width;
-  idex(pc, &imm_table[decinfo.isa.instr.funct3]);
+  decinfo.isa.instr.funct7 == 0b0000001 ? 
+  idex(pc, &r_m_table[decinfo.isa.instr.funct3]) :
+  idex(pc, &r_table[decinfo.isa.instr.funct3]);
 }
 
 /**
