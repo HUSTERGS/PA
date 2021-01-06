@@ -42,6 +42,9 @@ make_rtl_arith_logic(shr)
 make_rtl_arith_logic(sar)
 make_rtl_arith_logic(mul_lo)
 make_rtl_arith_logic(mul_hi)
+// RV32M mulhsu
+make_rtl_arith_logic(mul_hsu)
+
 make_rtl_arith_logic(imul_lo)
 make_rtl_arith_logic(imul_hi)
 make_rtl_arith_logic(div_q)
