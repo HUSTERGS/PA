@@ -35,13 +35,13 @@ make_EHelper(divu) {
 }
 
 make_EHelper(rem) {
-    rtl_idiv_p(&id_dest->val, &id_src->val, &id_src2->val);
+    rtl_idiv_r(&id_dest->val, &id_src->val, &id_src2->val);
     rtl_sr(id_dest->reg, &id_dest->val, 4);
     print_asm_template3(divu);
 }
 
 make_EHelper(remu) {
-    rtl_div_p(&id_dest->val, &id_src->val, &id_src2->val);
+    rtl_div_r(&id_dest->val, &id_src->val, &id_src2->val);
     rtl_sr(id_dest->reg, &id_dest->val, 4);
     print_asm_template3(divu);
 }
