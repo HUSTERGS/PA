@@ -109,7 +109,7 @@ make_DHelper(J) {
   
   decode_op_i(id_src , t0, true);
 
-  // print_Dop(id_src->str, OP_STR_SIZE, "0x%x", t0);
+  print_Dop(id_src->str, OP_STR_SIZE, "0x%x", t0);
 }
 
 make_DHelper(R) {
