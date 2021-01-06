@@ -16,6 +16,15 @@ typedef struct {
   int width;
 } OpcodeEntry;
 
+/**
+ * 定义了一系列的结构体，结构体的成员分别是decode函数，exec函数以及宽度
+ * 在idex函数中，由于参数是OpcodeEntry类型，所以似乎会进行某种意义上的自动嵌入？
+ * 也就是这些结构体的成员自动匹配到OpcodeEntry的decode，execute以及width成员中
+ * 
+ * 有的指令不需要译码，所以对应的decode成员就是NULL
+ * id，ex分别代表了decode以及execute函数的名字，比如IDEX(ld, load)就说明decode函数叫decode_ld，execute函数叫exec_load
+ * 
+ */
 #define IDEXW(id, ex, w)   {concat(decode_, id), concat(exec_, ex), w}
 #define IDEX(id, ex)       IDEXW(id, ex, 0)
 #define EXW(ex, w)         {NULL, concat(exec_, ex), w}

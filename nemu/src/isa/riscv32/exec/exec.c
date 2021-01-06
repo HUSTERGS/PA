@@ -12,22 +12,71 @@
  * lhu 101
  */
 static OpcodeEntry load_table [8] = {
-  EXW(lb_lh, 1), EX(lb_lh, 2), EXW(ld, 4), EMPTY, EXW(ld, 1), EXW(ld, 2), EMPTY, EMPTY
+  EXW(lb_lh, 1), EXW(lb_lh, 2), EXW(ld, 4), EMPTY, EXW(ld, 1), EXW(ld, 2), EMPTY, EMPTY
 };
 
 static make_EHelper(load) {
   decinfo.width = load_table[decinfo.isa.instr.funct3].width;
   idex(pc, &load_table[decinfo.isa.instr.funct3]);
 }
-
+/**
+ * sb 000
+ * sh 001
+ * sw 010
+ */ 
 static OpcodeEntry store_table [8] = {
-  EMPTY, EMPTY, EXW(st, 4), EMPTY, EMPTY, EMPTY, EMPTY, EMPTY
+  EXW(st, 1), EXW(st, 2), EXW(st, 4), EMPTY, EMPTY, EMPTY, EMPTY, EMPTY
 };
 
 static make_EHelper(store) {
   decinfo.width = store_table[decinfo.isa.instr.funct3].width;
   idex(pc, &store_table[decinfo.isa.instr.funct3]);
 }
+
+/**
+ * addi  000
+ * slli  001 *
+ * slti  010
+ * sltiu 011
+ * xori  100
+ * 
+ * srli  101 **
+ * srai  101 **
+ * 
+ * ori   110
+ * andi  111
+ */
+
+static OpcodeEntry imm_table [8] = {
+  EX(addi), EX(slli), EX(slti), EX(sltiu), EX(xori), EX(sr_li_ai), EX(ori), EX(andi),
+};
+
+
+static make_EHelper(imm) {
+  // 其实可以不需要设置width？
+  decinfo.width = imm_table[decinfo.isa.instr.funct3].width;
+  idex(pc, &imm_table[decinfo.isa.instr.funct3]);
+}
+
+/**
+ * add, sub 000
+ * sll      001
+ * slt      010
+ * sltu     011
+ * xor      100
+ * srl, sra 101
+ * or       110
+ * and      111
+ */
+static OpcodeEntry r_table [8] = {
+  EX(add_sub), EX(sll), EX(slt), EX(sltu), EX(xor), EX(slr_sra), EX(or), EX(and)
+};
+
+static make_EHelper(r) {
+  decinfo.width = imm_table[decinfo.isa.instr.funct3].width;
+  idex(pc, &imm_table[decinfo.isa.instr.funct3]);
+}
+
 /**
  * 由于所有的opcode的最后两位都是11，所以可以直接根据6-2共5位来进行索引，也就是2 ^ 5 = 32
  */

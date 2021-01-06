@@ -5,7 +5,7 @@
 
 #define RTL_PREFIX interpret
 
-#define rtl_li        concat(RTL_PREFIX, _rtl_li      )
+#define rtl_li        concat(RTL_PREFIX, _rtl_li      ) // 
 #define rtl_mv        concat(RTL_PREFIX, _rtl_mv      )
 #define rtl_add       concat(RTL_PREFIX, _rtl_add     )
 #define rtl_sub       concat(RTL_PREFIX, _rtl_sub     )
@@ -27,9 +27,9 @@
 #define rtl_div64_r   concat(RTL_PREFIX, _rtl_div64_r )
 #define rtl_idiv64_q  concat(RTL_PREFIX, _rtl_idiv64_q)
 #define rtl_idiv64_r  concat(RTL_PREFIX, _rtl_idiv64_r)
-#define rtl_lm        concat(RTL_PREFIX, _rtl_lm      )
-#define rtl_sm        concat(RTL_PREFIX, _rtl_sm      )
-#define rtl_host_lm   concat(RTL_PREFIX, _rtl_host_lm )
+#define rtl_lm        concat(RTL_PREFIX, _rtl_lm      ) // $2[len] -> $1
+#define rtl_sm        concat(RTL_PREFIX, _rtl_sm      ) // $2 -> $1[len]
+#define rtl_host_lm   concat(RTL_PREFIX, _rtl_host_lm ) 
 #define rtl_host_sm   concat(RTL_PREFIX, _rtl_host_sm )
 #define rtl_setrelop  concat(RTL_PREFIX, _rtl_setrelop)
 #define rtl_j         concat(RTL_PREFIX, _rtl_j       )
