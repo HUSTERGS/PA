@@ -90,9 +90,9 @@ make_DHelper(B) {
 
   t0 = (decinfo.isa.instr.simm12 << 12) | (decinfo.isa.instr.imm11 << 11) | 
        (decinfo.isa.instr.imm10_5 << 5) | (decinfo.isa.instr.imm4_1 << 1);
-  t0 >>= 1;
+  // t0 >>= 1;
   // offset是12位的
-  sext(&t0, 12);
+  sext(&t0, 13);
   // 将jmp_pc设置为当前pc和offset(t0)的和
   rtl_add(&decinfo.jmp_pc, &t0, &cpu.pc);
   // print_Dop(id_dest->str, OP_STR_SIZE, "0x%x", t0);
@@ -103,9 +103,9 @@ make_DHelper(J) {
 
   t0 =  (decinfo.isa.instr.simm20 << 20) | (decinfo.isa.instr.imm19_12 << 12) | 
         (decinfo.isa.instr.imm11_ << 11) | (decinfo.isa.instr.imm10_1 << 1);
-  t0 >>= 1;
+  // t0 >>= 1;
   // imm是20位的
-  sext(&t0, 20);
+  sext(&t0, 21);
   
   decode_op_i(id_src , t0, true);
 
