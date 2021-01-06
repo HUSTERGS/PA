@@ -31,14 +31,14 @@ make_EHelper(xori) {
 }
 
 make_EHelper(ori) {
-  rlt_or(&id_dest->val, &id_src->val, &id_src2->val);
-  rlt_sr(id_dest->reg, &id_dest->val, 4);
+  rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
   print_asm_template2(ori);
 }
 
 make_EHelper(andi) {
-  rlt_and(&id_dest->val, &id_src->val, &id_src2->val);
-  rlt_sr(id_dest->reg, &id_dest->val, 4);
+  rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
   print_asm_template2(andi);
 }
 
