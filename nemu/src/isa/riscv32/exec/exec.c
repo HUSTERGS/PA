@@ -82,7 +82,7 @@ static OpcodeEntry r_table [8] = {
  * rem    110
  * remu   111
  */
-static OpcodeEntry r_m_table[8] {
+static OpcodeEntry r_m_table[8] = {
   EX(mul), EX(mulh), EX(mulhsu), EX(mulhu), EX(div), EX(divu), EX(rem), EX(remu)
 };
 
@@ -91,7 +91,7 @@ static make_EHelper(r) {
   decinfo.isa.instr.funct7 == 0b0000001 ? 
   idex(pc, &r_m_table[decinfo.isa.instr.funct3]) :
   idex(pc, &r_table[decinfo.isa.instr.funct3]);
-}
+};
 
 /**
  * 由于所有的opcode的最后两位都是11，所以可以直接根据6-2共5位来进行索引，也就是2 ^ 5 = 32
