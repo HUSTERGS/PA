@@ -15,20 +15,20 @@ size_t strlen(const char *s) {
 
 char *strcpy(char* dst,const char* src) {
   
-  // size_t i = 0;
-  // while (src[i] != '\0') {
-  //   dst[i] = src[i];
-  //   i++;
-  // }
-  // assert(src[i] == '\0');
-  // dst[i] = '\0';
-  // return dst;
-  size_t i;
-  for(i=0;src[i]!='\0';i++) 
-    dst[i]=src[i];
-  
-  dst[i]='\0';
+  size_t i = 0;
+  while (src[i] != '\0') {
+    dst[i] = src[i];
+    i++;
+  }
+  assert(src[i] == '\0');
+  dst[i] = '\0';
   return dst;
+  // size_t i;
+  // for(i=0;src[i]!='\0';i++) 
+  //   dst[i]=src[i];
+  
+  // dst[i]='\0';
+  // return dst;
 }
 
 char* strncpy(char* dst, const char* src, size_t n) {
@@ -41,10 +41,6 @@ char* strncpy(char* dst, const char* src, size_t n) {
     dst[index++] = '\0';
   }
   return dst;
-  // size_t i;
-  // for (i = 0; i < n && src[i]!= '\0'; i++) dst[i] = src[i];
-  // for (; i < n; i++) dst[i] = '\0';
-  // return dst;
 }
 
 char* strcat(char* dst, const char* src) {
