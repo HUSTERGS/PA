@@ -60,15 +60,15 @@ char* strcat(char* dst, const char* src) {
 }
 
 int strcmp(const char* s1, const char* s2) {
-  // size_t i = 0;
-  // while (s1[i] != '\0' && s1[i] == s2[i]) {
-  //   i++;
-  // }
-  // return ((unsigned char *) s1)[i] - ((unsigned char *) s2)[i];
-  uint32_t i = 0;
-  for (i = 0; s1[i] == s2[i]; i++) if(s1[i] == '\0') return 0;
+  size_t i = 0;
+  while (s1[i] != '\0' && s1[i] == s2[i]) {
+    i++;
+  }
+  return ((unsigned char *) s1)[i] - ((unsigned char *) s2)[i];
+  // uint32_t i = 0;
+  // for (i = 0; s1[i] == s2[i]; i++) if(s1[i] == '\0') return 0;
 
-  return ((signed char *)s1)[i] - ((signed char *)s2)[i];
+  // return ((signed char *)s1)[i] - ((signed char *)s2)[i];
 }
 
 int strncmp(const char* s1, const char* s2, size_t n) {
@@ -80,15 +80,6 @@ int strncmp(const char* s1, const char* s2, size_t n) {
     }
   }
   return ((unsigned char *) s1)[i] - ((unsigned char *) s2)[i];
-  // int D_value = 0;
-  // size_t i    = 0;
-  
-  // for (i = 0; *s1 && *s2 && i < n && D_value != 0; i++) {
-  //   s1++; s2++;
-  // 	D_value = *s1 - *s2;
-  // }
-
-  // return D_value;
 }
 
 void* memset(void* v,int c,size_t n) {
