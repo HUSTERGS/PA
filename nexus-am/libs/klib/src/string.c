@@ -88,7 +88,8 @@ int memcmp(const void* s1, const void* s2, size_t n){
     ucs2++;
   }
   // return (*((unsigned char *)s1) - *((unsigned char *)s2));
-  return ucs1[i] - ucs2[i];
+  // return ucs1[i] - ucs2[i];
+  return *ucs1 - *ucs2;
 
 
   // size_t i = 0;
