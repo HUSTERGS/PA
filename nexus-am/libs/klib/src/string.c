@@ -61,7 +61,7 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 void* memset(void* v,int c,size_t n) {
   unsigned char * ptr = v;
   unsigned char val = c;
-  while (--n >= 0) {
+  while (n--) {
     ptr[n] = val;
   }
   return v;
@@ -82,7 +82,7 @@ int memcmp(const void* s1, const void* s2, size_t n){
   unsigned char * ucs1 = s1;
   unsigned char * ucs2 = s2;
   
-  while(--n && *ucs1 == *ucs2) {
+  while(i < n && *ucs1 == *ucs2) {
     i++;
     ucs1++;
     ucs2++;
