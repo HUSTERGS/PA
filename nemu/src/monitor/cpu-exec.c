@@ -48,10 +48,10 @@ void cpu_exec(uint64_t n) {
 
 #if defined(DIFF_TEST)
   uint32_t instr = vaddr_read(ori_pc, 4);
-  if (instr&0x7f == 0b1100111) {
+  if ((instr&0x7f) == 0b1100111) {
     // jalr
     difftest_skip_dut(1,2);
-  } else if (instr&0x7f == 0b1100111) {
+  } else if ((instr&0x7f) == 0b1100111) {
     // nemu_trap
     difftest_skip_ref();
   }
