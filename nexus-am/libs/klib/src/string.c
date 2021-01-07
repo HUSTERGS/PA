@@ -77,21 +77,21 @@ void* memcpy(void* out, const void* in, size_t n) {
 }
 
 int memcmp(const void* s1, const void* s2, size_t n){
-  // if(!n) return 0;
-  // while(--n && *(char *)s1 == *(char *)s2) {
-	//   s1 = (char *)s1 + 1;
-	//   s2 = (char *)s2 + 1;
-  // }
-  // return (*((unsigned char *)s1) - *((unsigned char *)s2));
-
-
-  size_t i = 0;
-  unsigned char * ucs1 = s1;
-  unsigned char * ucs2 = s2;
-  while (i < n && ucs1[i] == ucs2[i]) {
-    i++;
+  if(!n) return 0;
+  while(--n && *(char *)s1 == *(char *)s2) {
+	  s1 = (char *)s1 + 1;
+	  s2 = (char *)s2 + 1;
   }
-  return ucs1[i] - ucs2[i];
+  return (*((unsigned char *)s1) - *((unsigned char *)s2));
+
+
+  // size_t i = 0;
+  // unsigned char * ucs1 = s1;
+  // unsigned char * ucs2 = s2;
+  // while (i < n && ucs1[i] == ucs2[i]) {
+  //   i++;
+  // }
+  // return ucs1[i] - ucs2[i];
 }
 
 #endif
