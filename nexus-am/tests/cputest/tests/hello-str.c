@@ -1,5 +1,7 @@
 #include "trap.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 char buf[128];
 
 int main() {
