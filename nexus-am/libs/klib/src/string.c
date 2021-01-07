@@ -88,7 +88,7 @@ int memcmp(const void* s1, const void* s2, size_t n){
   size_t i = 0;
   unsigned char * ucs1 = s1;
   unsigned char * ucs2 = s2;
-  while (ucs1[i] == ucs2[i] && i < n) {
+  while (i < n && ucs1[i] == ucs2[i]) {
     i++;
   }
   return ucs1[i] - ucs2[i];
