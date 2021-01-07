@@ -29,14 +29,18 @@ char *strcpy(char* dst,const char* src) {
 }
 
 char* strncpy(char* dst, const char* src, size_t n) {
-  size_t index = 0;
-  while(src[index] != '\0' && index++ < n) {
-    dst[index] = src[index];
-  }
-  // 如果src的长度小于n的话，那么就在dst的后面填充'\0'
-  while (index < n) {
-    dst[index++] = '\0';
-  }
+  // size_t index = 0;
+  // while(src[index] != '\0' && index++ < n) {
+  //   dst[index] = src[index];
+  // }
+  // // 如果src的长度小于n的话，那么就在dst的后面填充'\0'
+  // while (index < n) {
+  //   dst[index++] = '\0';
+  // }
+  // return dst;
+  size_t i;
+  for (i = 0; i < n && src[i]!= '\0'; i++) dst[i] = src[i];
+  for (; i < n; i++) dst[i] = '\0';
   return dst;
 }
 
