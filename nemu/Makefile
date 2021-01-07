@@ -31,7 +31,7 @@ CC = gcc
 LD = gcc
 INCLUDES  = $(addprefix -I, $(INC_DIR))
 # CFLAGS   += -O2 -MMD -Wall -ggdb3 $(INCLUDES) -D__ISA__=$(ISA) -fomit-frame-pointer -mmanual-endbr -fcf-protection=none #-Werror
-CFLAGS   += -O2 -MMD -Wall -ggdb3 $(INCLUDES) -D__ISA__=$(ISA) -fomit-frame-pointer #-Werror
+CFLAGS   += -O0 -MMD -Wall -ggdb3 $(INCLUDES) -D__ISA__=$(ISA) -fomit-frame-pointer #-Werror
 
 QEMU_DIFF_PATH = $(NEMU_HOME)/tools/qemu-diff
 QEMU_SO = $(QEMU_DIFF_PATH)/build/$(ISA)-qemu-so

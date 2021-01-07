@@ -19,7 +19,7 @@ AS = $(CC)
 INCLUDES  = $(addprefix -I, $(INC_DIR))
 ISA_DEF = __ISA_$(shell echo $(ISA) | tr a-z A-Z)__
 
-CFLAGS_COMMON += -O2 -MMD $(INCLUDES) -D$(ISA_DEF) -static \
+CFLAGS_COMMON += -O0 -MMD $(INCLUDES) -D$(ISA_DEF) -static \
                  -fdata-sections -ffunction-sections -fno-builtin -fno-stack-protector 
 CFLAGS   += -std=gnu99
 CXXFLAGS += -std=c++11 -ffreestanding -fno-rtti -fno-exceptions
