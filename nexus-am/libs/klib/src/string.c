@@ -82,7 +82,7 @@ int memcmp(const void* s1, const void* s2, size_t n){
   unsigned char * ucs1 = s1;
   unsigned char * ucs2 = s2;
   
-  while(i < n && *ucs1 == *ucs2) {
+  while(i <= n && *ucs1 == *ucs2) {
     i++;
     ucs1++;
     ucs2++;
