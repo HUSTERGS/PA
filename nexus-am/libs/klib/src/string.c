@@ -44,7 +44,7 @@ int strcmp(const char* s1, const char* s2) {
   while (s1[i] != '\0' && s1[i] == s2[i]) {
     i++;
   }
-  return (unsigned char) s1[i] - (unsigned char) s2[i];
+  return ((unsigned char *) s1)[i] - ((unsigned char *) s2)[i];
 }
 
 int strncmp(const char* s1, const char* s2, size_t n) {
@@ -55,12 +55,12 @@ int strncmp(const char* s1, const char* s2, size_t n) {
       return 0; 
     }
   }
-  return (unsigned char) s1[i] - (unsigned char) s2[i];
+  return ((unsigned char *) s1)[i] - ((unsigned char *) s2)[i];
 }
 
 void* memset(void* v,int c,size_t n) {
-  unsigned char * ptr = (unsigned char *)v;
-  unsigned char val = (unsigned char)c;
+  unsigned char * ptr = v;
+  unsigned char val = c;
   while (--n >= 0) {
     ptr[n] = val;
   }
