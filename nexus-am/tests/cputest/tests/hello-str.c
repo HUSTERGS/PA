@@ -1,5 +1,5 @@
 #include "trap.h"
-
+#include <string.h>
 char buf[128];
 
 int main() {
