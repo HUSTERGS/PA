@@ -12,7 +12,7 @@ size_t strlen(const char *s) {
 
 char *strcpy(char* dst,const char* src) {
   strncpy(dst, src, strlen(src)+1);
-  return NULL;
+  return dst;
 }
 
 char* strncpy(char* dst, const char* src, size_t n) {
