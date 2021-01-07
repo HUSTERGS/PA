@@ -59,17 +59,17 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 }
 
 void* memset(void* v,int c,size_t n) {
-  // unsigned char * ptr = v;
-  // unsigned char val = c;
-  // while (--n >= 0) {
-  //   ptr[n] = val;
-  // }
-  // return v;
-  const unsigned char uc = c; /* only cat the lowest c */
-  unsigned char *vu;
-  for (vu = v; 0 < n; ++vu, --n)
-	  *vu = uc;
+  unsigned char * ptr = v;
+  unsigned char val = c;
+  while (n-- >= 0) {
+    ptr[n] = val;
+  }
   return v;
+  // const unsigned char uc = c; /* only cat the lowest c */
+  // unsigned char *vu;
+  // for (vu = v; 0 < n; ++vu, --n)
+	//   *vu = uc;
+  // return v;
 }
 
 void* memcpy(void* out, const void* in, size_t n) {
