@@ -54,8 +54,8 @@ int printf(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   int count = vsprintf(NULL, fmt, ap);
-  putc(NULL, '\0', count);
   va_end(ap);
+  putc(NULL, '\0', count);
   return count;
 }
 
@@ -65,7 +65,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char ch;
   int count = 0;
   while((ch = *fmt++)) {
-
     if (ch != '%') {
       _putc(ch);
       count++;
