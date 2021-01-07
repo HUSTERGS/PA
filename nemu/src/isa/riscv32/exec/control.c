@@ -52,4 +52,5 @@ make_EHelper(jalr) {
     interpret_rtl_j(decinfo.jmp_pc);
 
     print_asm_template2(jalr);   
+    difftest_skip_dut(1, 2);
 }
