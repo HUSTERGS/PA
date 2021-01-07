@@ -24,11 +24,12 @@ static void putc(char * dst, char ch, int offset) {
 static int print_s(const char * data, char * dst) {
   const char * count = data;
   while (*count) {
-    if (dst) {
-      putc(dst + (count - data), *count, 0);
-    } else {
-      putc(NULL, *count, 0);
-    }
+    putc(dst, *count, count - data);
+    // if (dst) {
+    //   putc(dst + (count - data), *count, 0);
+    // } else {
+    //   putc(NULL, *count, 0);
+    // }
     count++;
   }
   return count - data;
