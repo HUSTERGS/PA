@@ -90,7 +90,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
 int sprintf(char *out, const char *fmt, ...) {
   // assert(0);
-  printf("噜啦啦");
+  // printf("噜啦啦");
   va_list ap;
   va_start(ap, fmt);
   int count = vsprintf(out, fmt, ap);
