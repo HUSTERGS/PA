@@ -55,6 +55,7 @@ void __am_vga_init() {
   int i;
   int size = screen_width() * screen_height();
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+  // 将初始值i修改为0，使得背景为全黑
   for (i = 0; i < size; i ++) fb[i] = 0;
   draw_sync();
 }
