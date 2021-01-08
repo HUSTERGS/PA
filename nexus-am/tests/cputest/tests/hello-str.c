@@ -8,8 +8,8 @@ int main() {
 	_putc('c');
 	_putc('c');
 	_putc('c');
-	sprintf(buf, "%s", "Hello world!\n");
-	nemu_assert(strcmp(buf, "Hello world!\n") == 0);
+	// sprintf(buf, "%s", "Hello world!\n");
+	// nemu_assert(strcmp(buf, "Hello world!\n") == 0);
 
 	// sprintf(buf, "%d + %d = %d\n", 1, 1, 2);
 	// nemu_assert(strcmp(buf, "1 + 1 = 2\n") == 0);
