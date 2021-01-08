@@ -61,11 +61,6 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  _putc('c');
-  _putc('c');
-  _putc('c');
-  _putc('c');
-  _putc('c');
   char *s;
   int d;
   char ch;
