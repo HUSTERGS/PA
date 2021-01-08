@@ -61,6 +61,11 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
+  _putc('c');
+  _putc('c');
+  _putc('c');
+  _putc('c');
+  _putc('c');
   char *s;
   int d;
   char ch;
@@ -90,7 +95,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
 int sprintf(char *out, const char *fmt, ...) {
   // assert(0);
-  printf("lulalal");
+  // printf("lulalal");
   va_list ap;
   va_start(ap, fmt);
   int count = vsprintf(out, fmt, ap);
