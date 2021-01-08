@@ -89,7 +89,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-  // assert(0);
+  assert(0);
   va_list ap;
   va_start(ap, fmt);
   int count = vsprintf(out, fmt, ap);
