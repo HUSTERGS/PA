@@ -82,6 +82,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       d = va_arg(ap, int);
       count += out ? print_d(d, 0, out + count) : print_d(d, 0, NULL);
       break;
+    // 在pa2.3中的mainarg的main.c中使用了%c，如果klib使用自己的话就需要实现%c
+    case 'c':
+      ch = va_arg(ap, int);
+      putc(out, ch, count);
+      count++;
+      break;
     default:
       break;
     }
