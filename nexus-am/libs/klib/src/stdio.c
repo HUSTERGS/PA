@@ -68,7 +68,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   int count = 0;
   while((ch = *fmt++)) {
     if (ch != '%') {
-      _putc(ch);
+      putc(out, ch, count);
       count++;
       continue;
     }
