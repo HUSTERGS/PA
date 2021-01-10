@@ -50,19 +50,26 @@ make_EHelper(ECALL_EBREAK) {
     if (decinfo.isa.instr.rd == 0 && decinfo.isa.instr.rs1 == 0) {
         Log("进入了判断地方");
         switch (decinfo.isa.instr.simm11_0) {
-          case 0b000000000000: /* ECALL */ 
-          
-            raise_intr(9, cpu.pc); 
-            //printf("cpu.pc = %8x, decinfo.seq_pc = %8x\n", cpu.pc, decinfo.seq_pc);
+          case 0b000000000000: 
+            /* ECALL */ 
+            raise_intr(0, cpu.pc); 
             print_asm_template1(ecall); 
             break;
-          case 0b000000000001: /* EBREAK*/ TODO(); break;
-          case 0b000100000010: /* SRET  */ SRET(); print_asm_template3(sret); break;
+          case 0b000000000001: 
+            /* EBREAK*/ 
+            TODO(); 
+            break;
+          case 0b000100000010: 
+            /* SRET  */ 
+            SRET(); print_asm_template3(sret); 
+            break;
           default:assert(0);
         }
 
+    } else {
+        assert(0);
     }
-    assert(0);
+    // assert(0);
 
     /* ecall执行顺序：
      *  1.raise_intr(),设置scause，sstatus，sepc及stvec，并跳到陷入程序，即__am_asm_trap（nexus-am/am/src/riscv32/nemu/trap.S）
