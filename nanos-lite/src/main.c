@@ -33,7 +33,7 @@ int main() {
   Log("Finish initialization");
 /**
  * _yield -> 执行ecall指令 -> ecall_Helper
- * -> 调用raise_intr，NO设置为9？为啥
+ * -> 调用raise_intr，NO设置为9？为啥，还是说其实是随便设置的
  * 1. 保存当前的pc 到 SEPC
  * 2. NO保存到SCAUSE
  * 3. 读取stvec中保存的跳转目标位置
