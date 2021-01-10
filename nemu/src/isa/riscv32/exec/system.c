@@ -19,7 +19,7 @@ rtlreg_t csr_read(int index) {
 
 void csr_write(int index, rtlreg_t val) {
   check_csr_index(index);
-  switch(index) {
+  switch(index) { 
     case SSTATUS: cpu.csr.sstatus = val; break;
     case STVEC  : cpu.csr.stvec   = val; break;
     case SEPC   : cpu.csr.sepc    = val; break;
@@ -41,7 +41,7 @@ static inline void SRET(){
   //  cpu.csr.sstatus_32.SIE  = cpu.csr.sstatus_32.SPIE;
   //  cpu.csr.sstatus_32.SPIE = 1;
   //  cpu.csr.sstatus_32.SPP  = 0;
-   interpret_rtl_jr(&t0);
+   interpret_rtl_j(t0);
 }
 
 
@@ -61,7 +61,8 @@ make_EHelper(ECALL_EBREAK) {
             break;
           case 0b000100000010: 
             /* SRET  */ 
-            SRET(); print_asm_template3(sret); 
+            SRET(); 
+            print_asm_template3(sret); 
             break;
           default:assert(0);
         }

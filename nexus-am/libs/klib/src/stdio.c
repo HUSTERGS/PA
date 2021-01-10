@@ -2,14 +2,6 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-// // 将参数列表的参数，int/str转化为param，然后进行打印
-// static struct param {
-//   char * buffer; // 用于将参数转化为字符之后保存数据
-//   int value;
-//   const char * str;
-//   short sign; // 正负数
-// };
-// 返回打印的字符的个数
 
 // 根据dst是否为NULL来判断应该输出到标准输出还是输出到dst
 static void putc(char * dst, char ch, int offset) {
@@ -94,12 +86,12 @@ int printf(const char *fmt, ...) {
 
 
 
-static void print_bits(long value) {
-  while (value / 16) {
-    _putc(int_to_ch(value % 16));
-    value /= 16;
-  }
-}
+// static void print_bits(long value) {
+//   while (value / 16) {
+//     _putc(int_to_ch(value % 16));
+//     value /= 16;
+//   }
+// }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
 
