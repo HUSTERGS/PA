@@ -60,7 +60,7 @@ make_EHelper(ECALL_EBREAK) {
           default:assert(0);
         }
 
-    }  
+    }
     assert(0);
 
     /* ecall执行顺序：
