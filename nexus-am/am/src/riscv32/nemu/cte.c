@@ -5,7 +5,7 @@ static _Context* (*user_handler)(_Event, _Context*) = NULL;
 
 _Context* __am_irq_handle(_Context *c) {
   // Log("进入了handle函数");
-  _halt(1);
+  // _halt(1);
   _Context *next = c;
   if (user_handler) {
     _Event ev = {0};
