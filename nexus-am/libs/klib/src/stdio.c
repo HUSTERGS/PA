@@ -113,7 +113,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
       break;
     case 'p':
-      d = va_arg(ap, int);
+      d = va_arg(ap, long);
       putc(out, '0', count++);
       putc(out, 'x', count++);
       count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
