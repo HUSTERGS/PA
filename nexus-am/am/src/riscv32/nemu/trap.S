@@ -21,7 +21,7 @@ f(30) f(31)
 .globl __am_asm_trap
 __am_asm_trap:
   addi sp, sp, -CONTEXT_SIZE
-
+# 依次保存每一个寄存器
   MAP(REGS, PUSH)
 
   mv t0, sp
