@@ -78,6 +78,13 @@ int printf(const char *fmt, ...) {
   return count;
 }
 
+static void print_bits(long value) {
+  while (value / 16) {
+    _putc(int_to_ch(value % 16));
+    value /= 16;
+  }
+}
+
 int vsprintf(char *out, const char *fmt, va_list ap) {
 
   char *s;
@@ -99,6 +106,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       break;
     case 'd':
       d = va_arg(ap, int);
+      print_bits(d);
       count += out ? print_d(d, 0, out + count, 10) : print_d(d, 0, NULL, 10);
       break;
     // 在pa2.3中的mainarg的main.c中使用了%c，如果klib使用自己的话就需要实现%c
