@@ -112,9 +112,15 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       d = va_arg(ap, int);
       count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
       break;
+    case 'p':
+      d = va_arg(ap, int);
+      putc(out, '0', count++);
+      putc(out, 'x', count++);
+      count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
+      break;
     case '0':
       // 遇到0，之后的数字就是长度
-      
+
       width = *fmt++ - '0';
       d = va_arg(ap, int);
       // 直接向对应的位置填充width - actual_witdth个字符
@@ -133,7 +139,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       }
       fmt++;
     default:
-      break;
+      assert(0);
     }
   }
   return count;
