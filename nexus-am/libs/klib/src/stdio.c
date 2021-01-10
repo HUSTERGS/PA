@@ -59,7 +59,7 @@ static int print_d(long d, int count, char * dst, int base) {
     putc(dst, '-', count);
     return print_d(-d, count, dst ? dst+1 : dst, base) +1;
   }
-  assert(d >= 0);
+  
   if (d / base) {
     count += print_d(d / base, count, dst, base);
     putc(dst, int_to_ch(d % base), count);
@@ -71,7 +71,8 @@ static int print_d(long d, int count, char * dst, int base) {
 
 
 static int print_p(unsigned long p, int count, char * dst) {
-  int base = 16;
+  unsigned int base = 16;
+  assert(p >= 0);
   if (p / base) {
     count += print_p(p / base, count, dst);
     putc(dst, int_to_ch(p % base), count);
