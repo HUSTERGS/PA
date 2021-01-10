@@ -44,14 +44,10 @@ static inline void SRET(){
    interpret_rtl_jr(&t0);
 }
 
-/* ECALL EBREAK */
-make_EHelper(ECALL_EBREAK) { /* void exec_ECALL_EBREAK */
+
+make_EHelper(ECALL_EBREAK) {
     
-    //printf("rd = %d, rs1 = %d\n", decinfo.isa.instr.rd, decinfo.isa.instr.rs1); 
     if (decinfo.isa.instr.rd == 0 && decinfo.isa.instr.rs1 == 0) {
-        
-        //printf("simm11_0 = %d, pc=0x%08x\n", decinfo.isa.instr.simm11_0, decinfo.seq_pc);
-        
         switch (decinfo.isa.instr.simm11_0) {
           case 0b000000000000: /* ECALL */ 
           
@@ -64,7 +60,8 @@ make_EHelper(ECALL_EBREAK) { /* void exec_ECALL_EBREAK */
           default:assert(0);
         }
 
-    } else assert(0);
+    }  
+    assert(0);
 
     /* ecall执行顺序：
      *  1.raise_intr(),设置scause，sstatus，sepc及stvec，并跳到陷入程序，即__am_asm_trap（nexus-am/am/src/riscv32/nemu/trap.S）

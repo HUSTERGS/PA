@@ -36,7 +36,7 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
 _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   return NULL;
 }
-
+// 通过ecall指令使得cpu自陷，将会跳转到ecall指令的执行
 void _yield() {
   asm volatile("li a7, -1; ecall");
 }
