@@ -45,7 +45,8 @@ static int print_s(const char * data, char * dst) {
 }
 
 static char int_to_ch(int value) {
-  if (value < 10 && value >= 0) {
+  assert(value >= 0);
+  if (value < 10) {
     return value + '0';
   } else {
     return value - 10 + 'a';
@@ -68,7 +69,7 @@ static int print_d(long d, int count, char * dst, int base) {
 }
 
 
-static int print_p(uint64_t p, int count, char * dst) {
+static int print_p(unsigned long p, int count, char * dst) {
   int base = 16;
   if (p / base) {
     count += print_p(p / base, count, dst);
@@ -137,7 +138,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       d = va_arg(ap, long);
       putc(out, '0', count++);
       putc(out, 'x', count++);
-      count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
+      count += print_p(d, 0, out ? out + count : out);
+      // count += out ? print_p(d, 0, out + count) : print_p(d, 0, NULL);
       break;
     case '0':
       // 遇到0，之后的数字就是长度
