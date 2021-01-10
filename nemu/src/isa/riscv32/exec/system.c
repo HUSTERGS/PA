@@ -61,7 +61,7 @@ make_EHelper(ECALL_EBREAK) {
         }
 
     }
-    assert(0);
+    // assert(0);
 
     /* ecall执行顺序：
      *  1.raise_intr(),设置scause，sstatus，sepc及stvec，并跳到陷入程序，即__am_asm_trap（nexus-am/am/src/riscv32/nemu/trap.S）
