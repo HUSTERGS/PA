@@ -45,7 +45,7 @@ static int print_s(const char * data, char * dst) {
 }
 
 static char int_to_ch(int value) {
-  assert(value >= 0);
+  // assert(value >= 0);
   if (value < 10) {
     return value + '0';
   } else {
@@ -59,6 +59,7 @@ static int print_d(long d, int count, char * dst, int base) {
     putc(dst, '-', count);
     return print_d(-d, count, dst ? dst+1 : dst, base) +1;
   }
+  assert(d >= 0);
   if (d / base) {
     count += print_d(d / base, count, dst, base);
     putc(dst, int_to_ch(d % base), count);
@@ -135,7 +136,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
       break;
     case 'p':
-      d = va_arg(ap, long);
+      d = va_arg(ap, unsigned long);
       putc(out, '0', count++);
       putc(out, 'x', count++);
       count += print_p(d, 0, out ? out + count : out);
