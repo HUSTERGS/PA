@@ -114,6 +114,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       break;
     case '0':
       // 遇到0，之后的数字就是长度
+      
       width = *fmt++ - '0';
       d = va_arg(ap, int);
       // 直接向对应的位置填充width - actual_witdth个字符
