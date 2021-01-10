@@ -20,6 +20,14 @@ static void putc(char * dst, char ch, int offset) {
   }
 }
 
+static int int_width(int value, int base) {
+  int count = 1;
+  while (value / base) {
+    count++;
+    value /= base;
+  }
+  return count;
+}
 
 static int print_s(const char * data, char * dst) {
   const char * count = data;
@@ -35,19 +43,29 @@ static int print_s(const char * data, char * dst) {
   return count - data;
 }
 
-static int print_d(int d, int count, char * dst) {
+static char int_to_ch(int value) {
+  if (value < 10 && value >= 0) {
+    return value + '0';
+  } else {
+    return value - 10 + 'a';
+  }
+}
+
+static int print_d(int d, int count, char * dst, int base) {
+  assert(base == 10 || base == 16);
   if (d < 0) {
     putc(dst, '-', count);
-    return print_d(-d, count, dst+1) +1;
+    return print_d(-d, count, dst+1, base) +1;
   }
-  if (d / 10) {
-    count += print_d(d / 10, count, dst);
-    putc(dst, d % 10 + '0', count);
+  if (d / base) {
+    count += print_d(d / base, count, dst, base);
+    putc(dst, int_to_ch(d % base), count);
   } else {
-    putc(dst, d + '0', count);
+    putc(dst, int_to_ch(d), count);
   }
   return count + 1;
 }
+
 
 
 
@@ -66,6 +84,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   int d;
   char ch;
   int count = 0;
+  int width;
   while((ch = *fmt++)) {
     if (ch != '%') {
       putc(out, ch, count);
@@ -80,7 +99,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       break;
     case 'd':
       d = va_arg(ap, int);
-      count += out ? print_d(d, 0, out + count) : print_d(d, 0, NULL);
+      count += out ? print_d(d, 0, out + count, 10) : print_d(d, 0, NULL, 10);
       break;
     // 在pa2.3中的mainarg的main.c中使用了%c，如果klib使用自己的话就需要实现%c
     case 'c':
@@ -88,6 +107,30 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       putc(out, ch, count);
       count++;
       break;
+    // 16进制
+    case 'x':
+      d = va_arg(ap, int);
+      count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
+      break;
+    case '0':
+      // 遇到0，之后的数字就是长度
+      width = *fmt++ - '0';
+      d = va_arg(ap, int);
+      // 直接向对应的位置填充width - actual_witdth个字符
+      for (int i = 0; i < width - int_width(d, *fmt == 'd' ? 10 : 16); i++) {
+        putc(out, '0', count + i);
+      }
+      assert(width == 8);
+      if (*fmt == 'd') {
+        out ? print_d(d, 0, out + count, 10) : print_d(d, 0, NULL, 10);
+        count += width;
+      } else if (*fmt == 'x') {
+        out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
+        count += width;
+      } else {
+        assert(0);
+      }
+      fmt++;
     default:
       break;
     }

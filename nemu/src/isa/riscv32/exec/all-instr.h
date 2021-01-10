@@ -52,3 +52,11 @@ make_EHelper(jal);
 
 // B
 make_EHelper(branch);
+
+make_EHelper(ECALL_EBREAK);
+make_EHelper(CSRRW);
+make_EHelper(CSRRS);
+make_EHelper(CSRRC);
+make_EHelper(CSRRWI);
+make_EHelper(CSSRRSI);
+make_EHelper(CSRRCI);

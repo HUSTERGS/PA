@@ -93,6 +93,26 @@ static make_EHelper(r) {
   idex(pc, &r_table[decinfo.isa.instr.funct3]);
 };
 
+
+/* system_opcode, use to decode the following instruction
+ *  000 ecall, ebreak
+ *  001 csrrw
+ *  010 csrrs
+ *  011 csrrc
+ *  100 
+ *  101 csrrwi
+ *  110 cssrrsi 
+ *  111 csrrci
+ */ 
+static OpcodeEntry system_table[8] = {
+  EX(ECALL_EBREAK), EX(CSRRW), EX(CSRRS), EX(CSRRC), EMPTY, EX(CSRRWI), EX(CSSRRSI), EX(CSRRCI)
+};
+
+static make_EHelper(system) { /* static void exec_system(vaddr_T *pc) */
+  //decinfo.width = system_table[decinfo.isa.instr.funct3].width;
+  idex(pc, &system_table[decinfo.isa.instr.funct3]);
+}
+
 /**
  * 由于所有的opcode的最后两位都是11，所以可以直接根据6-2共5位来进行索引，也就是2 ^ 5 = 32
  */
@@ -100,7 +120,7 @@ static OpcodeEntry opcode_table [32] = {
   /* b00 */ IDEX(ld, load), EMPTY, EMPTY, EMPTY, IDEX(I, imm), IDEX(U, auipc), EMPTY, EMPTY,
   /* b01 */ IDEX(st, store), EMPTY, EMPTY, EMPTY, IDEX(R, r), IDEX(U, lui), EMPTY, EMPTY,
   /* b10 */ EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY,
-  /* b11 */ IDEX(B, branch), IDEX(I, jalr), EX(nemu_trap), IDEX(J, jal), EMPTY, EMPTY, EMPTY, EMPTY,
+  /* b11 */ IDEX(B, branch), IDEX(I, jalr), EX(nemu_trap), IDEX(J, jal), IDEX(I, system), EMPTY, EMPTY, EMPTY,
 };
 
 void isa_exec(vaddr_t *pc) {
