@@ -20,7 +20,7 @@ static void putc(char * dst, char ch, int offset) {
   }
 }
 
-static int int_width(int value, int base) {
+static int int_width(long value, int base) {
   int count = 1;
   while (value / base) {
     count++;
@@ -43,7 +43,7 @@ static int print_s(const char * data, char * dst) {
   return count - data;
 }
 
-static char int_to_ch(int value) {
+static char int_to_ch(long value) {
   if (value < 10 && value >= 0) {
     return value + '0';
   } else {
@@ -51,7 +51,7 @@ static char int_to_ch(int value) {
   }
 }
 
-static int print_d(int d, int count, char * dst, int base) {
+static int print_d(long d, int count, char * dst, int base) {
   assert(base == 10 || base == 16);
   if (d < 0) {
     putc(dst, '-', count);
@@ -81,7 +81,7 @@ int printf(const char *fmt, ...) {
 int vsprintf(char *out, const char *fmt, va_list ap) {
 
   char *s;
-  int d;
+  long d;
   char ch;
   int count = 0;
   int width;
