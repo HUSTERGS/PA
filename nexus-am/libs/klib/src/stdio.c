@@ -29,6 +29,7 @@ static int int_width(long value, int base) {
   return count;
 }
 
+
 static int print_s(const char * data, char * dst) {
   const char * count = data;
   while (*count) {
@@ -43,7 +44,7 @@ static int print_s(const char * data, char * dst) {
   return count - data;
 }
 
-static char int_to_ch(long value) {
+static char int_to_ch(int value) {
   if (value < 10 && value >= 0) {
     return value + '0';
   } else {
@@ -55,7 +56,7 @@ static int print_d(long d, int count, char * dst, int base) {
   assert(base == 10 || base == 16);
   if (d < 0) {
     putc(dst, '-', count);
-    return print_d(-d, count, dst+1, base) +1;
+    return print_d(-d, count, dst ? dst+1 : dst, base) +1;
   }
   if (d / base) {
     count += print_d(d / base, count, dst, base);
@@ -67,6 +68,16 @@ static int print_d(long d, int count, char * dst, int base) {
 }
 
 
+static int print_p(uint64_t p, int count, char * dst) {
+  int base = 16;
+  if (p / base) {
+    count += print_p(p / base, count, dst);
+    putc(dst, int_to_ch(p % base), count);
+  } else {
+    putc(dst, int_to_ch(p), count);
+  }
+  return count + 1;
+}
 
 
 int printf(const char *fmt, ...) {
@@ -77,6 +88,8 @@ int printf(const char *fmt, ...) {
   putc(NULL, '\0', count);
   return count;
 }
+
+
 
 static void print_bits(long value) {
   while (value / 16) {
