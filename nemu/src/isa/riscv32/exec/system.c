@@ -46,9 +46,9 @@ static inline void SRET(){
 
 
 make_EHelper(ECALL_EBREAK) {
-    Log("进入ECALL_EBREAK函数");
+    // Log("进入ECALL_EBREAK函数");
     if (decinfo.isa.instr.rd == 0 && decinfo.isa.instr.rs1 == 0) {
-        Log("进入了判断地方");
+        // Log("进入了判断地方");
         switch (decinfo.isa.instr.simm11_0) {
           case 0b000000000000: 
             /* ECALL */ 
