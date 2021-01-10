@@ -48,6 +48,7 @@ static inline void SRET(){
 make_EHelper(ECALL_EBREAK) {
     Log("进入ECALL_EBREAK函数");
     if (decinfo.isa.instr.rd == 0 && decinfo.isa.instr.rs1 == 0) {
+        Log("进入了判断地方");
         switch (decinfo.isa.instr.simm11_0) {
           case 0b000000000000: /* ECALL */ 
           
@@ -61,7 +62,7 @@ make_EHelper(ECALL_EBREAK) {
         }
 
     }
-    // assert(0);
+    assert(0);
 
     /* ecall执行顺序：
      *  1.raise_intr(),设置scause，sstatus，sepc及stvec，并跳到陷入程序，即__am_asm_trap（nexus-am/am/src/riscv32/nemu/trap.S）
