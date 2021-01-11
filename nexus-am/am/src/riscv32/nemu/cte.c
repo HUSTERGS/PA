@@ -40,6 +40,7 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   return NULL;
 }
 // 通过ecall指令使得cpu自陷，将会跳转到ecall指令的执行
+// 其中li a7, -1将a7设置为-1，表示当前的ecall类型是自陷
 void _yield() {
   asm volatile("li a7, -1; ecall");
 }
