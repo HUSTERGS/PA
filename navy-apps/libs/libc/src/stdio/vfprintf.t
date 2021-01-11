@@ -849,9 +849,9 @@ _VFPRINTF_R (struct _reent *data,
 
 #ifndef STRING_ONLY
 	/* Initialize std streams if not dealing with sprintf family.  */
-	
-	CHECK_INIT (data, fp);
 	write(1, "printf function\n", 16);
+	CHECK_INIT (data, fp);
+	
 	_newlib_flockfile_start (fp);
 
 	ORIENT(fp, -1);
