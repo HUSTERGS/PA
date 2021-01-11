@@ -9,11 +9,20 @@ _Context* __am_irq_handle(_Context *c) {
   _Context *next = c;
   if (user_handler) {
     _Event ev = {0};
-    switch (c->cause) {
-      case -1: ev.event = _EVENT_YIELD; break;
-      case 1: ev.event = _EVENT_SYSCALL;break;
-      default: ev.event = _EVENT_ERROR; break;
+    // 如果是-1的话就是yiled，如果是0-19的话，就作为系统调用号，也就是_EVENT_SYSCALL
+    if (c->cause == -1) {
+      ev.event = _EVENT_YIELD;
+    } else if (c->cause >= 0 && c->cause <= 19) {
+      ev.event = _EVENT_SYSCALL;
+    } else {
+      ev.event = _EVENT_ERROR;
     }
+    // switch (c->cause) {
+    //   case -1: ev.event = _EVENT_YIELD; break;
+    //   case 0: ev.event = _EVENT_SYSCALL; break;
+    //   case 1: ev.event = _EVENT_SYSCALL;break;
+    //   default: ev.event = _EVENT_ERROR; break;
+    // }
 
     next = user_handler(ev, c);
     if (next == NULL) {
