@@ -50,9 +50,10 @@ printf (const char *__restrict fmt, ...)
   int ret;
   va_list ap;
   struct _reent *ptr = _REENT;
-  write(1, "printf function\n", 16);
+  
   _REENT_SMALL_CHECK_INIT (ptr);
   va_start (ap, fmt);
+  write(1, "printf function\n", 16);
   ret = _vfprintf_r (ptr, _stdout_r (ptr), fmt, ap);
   va_end (ap);
   return ret;
