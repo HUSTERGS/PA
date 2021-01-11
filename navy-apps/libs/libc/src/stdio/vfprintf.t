@@ -861,7 +861,7 @@ _VFPRINTF_R (struct _reent *data,
 		_newlib_flockfile_exit (fp);
 		return (EOF);
 	}
-
+write(1, "printf function\n", 16);
 #ifdef _UNBUF_STREAM_OPT
 	/* optimise fprintf(stderr) (and other unbuffered Unix files) */
 	if ((fp->_flags & (__SNBF|__SWR|__SRW)) == (__SNBF|__SWR) &&
@@ -899,7 +899,7 @@ _VFPRINTF_R (struct _reent *data,
 	is_pos_arg = 0;
 #endif
 
-write(1, "printf function\n", 16);
+
 	/*
 	 * Scan the format for conversions (`%' character).
 	 */
