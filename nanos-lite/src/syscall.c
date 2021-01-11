@@ -41,7 +41,7 @@ _Context* do_syscall(_Context *c) {
       //     _putc(*((char *)(*(void **)(a[2])) + i));
       //   }
       // }
-      // c->GPRx = a[3];
+      c->GPRx = a[3];
       break;
     case SYS_kill: break;
     case SYS_getpid: break;
