@@ -81,6 +81,7 @@ void *_sbrk(intptr_t increment) {
   // } else {
   //   return -1;
   // }
+  _syscall_(SYS_brk, 0, 0, 0);
   return (void *)-1;
 }
 
