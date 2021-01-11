@@ -42,6 +42,7 @@ static inline void SRET(){
   //  cpu.csr.sstatus_32.SPIE = 1;
   //  cpu.csr.sstatus_32.SPP  = 0;
    interpret_rtl_j(t0);
+
 }
 
 
@@ -147,6 +148,7 @@ make_EHelper(CSSRRSI) {
   rtl_or(&t1, &t0, &id_src->reg);
   csr_write(id_src2->val, t1);
   rtl_sr(id_dest->reg, &t0, 4); 
+  print_asm_template3(cssrrsi);
 }
 
 make_EHelper(CSRRCI) {
@@ -160,4 +162,5 @@ make_EHelper(CSRRCI) {
    rtl_and(&s0, &t0, &t1);
    csr_write(id_src2->val, s0);
    rtl_sr(id_dest->reg, &t0, 4);
+   print_asm_template3(csrrci);
 }
