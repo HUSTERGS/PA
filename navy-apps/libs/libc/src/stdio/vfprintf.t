@@ -857,11 +857,11 @@ _VFPRINTF_R (struct _reent *data,
 	ORIENT(fp, -1);
 
 	/* sorry, fprintf(read_only_file, "") returns EOF, not 0 */
-	if (cantwrite (data, fp)) {
-		write(1, "printf function\n", 16);
-		_newlib_flockfile_exit (fp);
-		return (EOF);
-	}
+	// if (cantwrite (data, fp)) {
+		
+	// 	_newlib_flockfile_exit (fp);
+	// 	return (EOF);
+	// }
 
 #ifdef _UNBUF_STREAM_OPT
 	/* optimise fprintf(stderr) (and other unbuffered Unix files) */
