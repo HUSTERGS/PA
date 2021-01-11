@@ -81,7 +81,7 @@ void *_sbrk(intptr_t increment) {
   // } else {
   //   return -1;
   // }
-  return (void *)-1;
+  return (void *)0;
 }
 
 int _read(int fd, void *buf, size_t count) {
