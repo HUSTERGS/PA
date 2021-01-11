@@ -67,6 +67,7 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 void *_sbrk(intptr_t increment) {
+  _write(1, "printf function2\n", 17);
   return (void *)-1;
 }
 
