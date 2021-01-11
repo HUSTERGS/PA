@@ -4,6 +4,7 @@
 int main() {
   write(1, "Enter hello.c file\n", 19);
   write(1, "Hello World!\n", 13);
+  printf("111");
   int i = 2;
   volatile int j = 0;
   // while (1) {
@@ -13,7 +14,7 @@ int main() {
   //     j = 0;
   //   }
   // }
-  printf("111");
+  // printf("111");
   write(1, "Exit hello.c file\n", 18);
   return 0;
 }
