@@ -1,9 +1,4 @@
 #include "cpu/exec.h"
-// 个人感觉lui应该是属于load store而不是属于compute所以就转移到这里了
-make_EHelper(lui) {
-  rtl_sr(id_dest->reg, &id_src->val, 4);
-  print_asm_template2(lui);
-}
 
 make_EHelper(ld) {
   rtl_lm(&s0, &id_src->addr, decinfo.width);
@@ -28,13 +23,16 @@ make_EHelper(st) {
   }
 }
 
-make_EHelper(lb_lh) {
-  rtl_lm(&s0, &id_src->addr, decinfo.width);
-  
-  switch(decinfo.width) {
-    case 2: rtl_sext(&s1, &s0, 2); print_asm_template2(lh);break;
-    case 1: rtl_sext(&s1, &s0, 1); print_asm_template2(lb);break;
-    default: assert(0);
-  }
-  rtl_sr(id_dest->reg, &s1, 4);  
+make_EHelper(lh){
+  rtl_lm(&s0,&id_src->addr,2);
+  rtl_sext(&s1,&s0,2);
+  rtl_sr(id_dest->reg,&s1,4);
+  print_asm_template2(lh);
+}
+
+make_EHelper(lb){
+  rtl_lm(&s0,&id_src->addr,1);
+  rtl_sext(&s1,&s0,1);
+  rtl_sr(id_dest->reg,&s1,4);
+  print_asm_template2(lh);
 }
