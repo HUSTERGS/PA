@@ -17,9 +17,21 @@ _Context* do_syscall(_Context *c) {
   switch (a[0]) {
     case SYS_exit: _halt(0); c->GPRx = 0; break;
     case SYS_yield:  _yield();c->GPRx = 0; break;
-    case SYS_open: ; break;
+    case SYS_open: break;
     case SYS_read: break;
     case SYS_write: 
+      /**
+       * a[1] int fd
+       * a[2] void * buf 
+       * a[3] size_t count
+       */
+      if (a[1] == 1 || a[1] == 2) {
+        for (int i = 0; i < (size_t) (a[3]); i++) {
+          _putc((*(char *)(a[2]) + i));
+        }
+      }
+      c->GPRx = a[3];
+      break;
     case SYS_kill: break;
     case SYS_getpid: break;
     case SYS_close: break;
