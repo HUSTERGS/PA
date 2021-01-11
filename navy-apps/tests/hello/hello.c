@@ -7,7 +7,8 @@ int main() {
   // write(1, "Hello World!\n", 13);
   // write(1, "Hello World!\n", 13);
   // write(1, "Hello World!\n", 13);
-  printf("");
+  char s[10] = "123";
+  sprintf(s, "456");
   // int i = 2;
   // volatile int j = 0;
   // // while (1) {
