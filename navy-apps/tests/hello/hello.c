@@ -2,14 +2,14 @@
 #include <stdio.h>
 
 int main() {
-  write(1, "Enter hello.c file\n", 19);
-  write(1, "Hello World!\n", 13);
+  // write(1, "Enter hello.c file\n", 19);
   // write(1, "Hello World!\n", 13);
-  // write(1, "Hello World!\n", 13);
-  // write(1, "Hello World!\n", 13);
-  char s[10] = "123";
-  sprintf(s+3, "456");
-  write(1, s, 10);
+  // // write(1, "Hello World!\n", 13);
+  // // write(1, "Hello World!\n", 13);
+  // // write(1, "Hello World!\n", 13);
+  // char s[10] = "123";
+  // sprintf(s+3, "456");
+  // write(1, s, 10);
   printf("lalala");
   // int i = 2;
   // volatile int j = 0;
