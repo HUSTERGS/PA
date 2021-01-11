@@ -28,7 +28,7 @@ _Context* do_syscall(_Context *c) {
       Log("进入write");
       // a[1] = c->GPR2;
 
-      Log("fd = %d", *(int *)(a[1]));
+      // Log("fd = %d", *(int *)(a[1]));
       Log("尬住了");
       if (a[1] == 1 || a[1] == 2) {
         for (int i = 0; i < a[3]; i++) {
