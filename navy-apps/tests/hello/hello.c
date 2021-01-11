@@ -12,5 +12,6 @@ int main() {
       j = 0;
     }
   }
+  write(1, "Exit hello.c file\n", 18);
   return 0;
 }
