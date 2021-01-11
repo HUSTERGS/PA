@@ -68,20 +68,20 @@ int _write(int fd, void *buf, size_t count) {
 
 void *_sbrk(intptr_t increment) {
   // _write(1, "printf function2\n", 17);
-  extern uint32_t _end;
-  static uint32_t program_break = 0;
-  if (program_break == 0) {
-    program_break = &_end;
-    _syscall_(SYS_brk, program_break, 0, 0);  // 第一次调用
-  }
-  if (_syscall_(SYS_brk, program_break + increment, 0, 0) == 0) {
-    uint32_t old_break = program_break;
-    program_break += increment;
-    return old_break;
-  } else {
-    return -1;
-  }
-  // return (void *)-1;
+  // extern uint32_t _end;
+  // static uint32_t program_break = 0;
+  // if (program_break == 0) {
+  //   program_break = &_end;
+  //   _syscall_(SYS_brk, program_break, 0, 0);  // 第一次调用
+  // }
+  // if (_syscall_(SYS_brk, program_break + increment, 0, 0) == 0) {
+  //   uint32_t old_break = program_break;
+  //   program_break += increment;
+  //   return old_break;
+  // } else {
+  //   return -1;
+  // }
+  return (void *)-1;
 }
 
 int _read(int fd, void *buf, size_t count) {

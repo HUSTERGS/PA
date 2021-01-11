@@ -44,12 +44,12 @@ _Context* do_syscall(_Context *c) {
     case SYS_brk: 
       // 设置堆区大小的系统调用
       // 始终返回0，表示堆区大小的调整总是成功
-      #ifdef HAS_VME
-        extern int mm_brk(uintptr_t new_brk);
-        return mm_brk(brk);
-      #else
-        return 0;
-      #endif
+      // #ifdef HAS_VME
+      //   extern int mm_brk(uintptr_t new_brk);
+      //   return mm_brk(brk);
+      // #else
+      //   return 0;
+      // #endif
       c->GPRx = 0;
       break;
     case SYS_fstat: break;
