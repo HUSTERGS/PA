@@ -799,7 +799,6 @@ _VFPRINTF_R (struct _reent *data,
 }
 #define FLUSH()
 #endif
-  write(1, "printf function\n", 16);
 
 	/* Macros to support positional arguments */
 #ifndef _NO_POS_ARGS
@@ -897,6 +896,7 @@ _VFPRINTF_R (struct _reent *data,
 	numargs = 0;
 	is_pos_arg = 0;
 #endif
+  write(1, "printf function\n", 16);
 
 	/*
 	 * Scan the format for conversions (`%' character).
