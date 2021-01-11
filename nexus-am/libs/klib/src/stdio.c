@@ -126,7 +126,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     // 16进制
     case 'x':
       d = va_arg(ap, int);
-      count += out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
+      count += out ? print_p(d, 0, out + count) : print_p(d, 0, NULL);
       break;
     case 'p':
       d = va_arg(ap, unsigned long);
