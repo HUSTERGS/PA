@@ -1,163 +1,150 @@
 #include "cpu/exec.h"
 
-make_EHelper(lui) {
-  rtl_sr(id_dest->reg, &id_src->val, 4);
 
-  print_asm_template2(lui);
+
+/************ I instructions ************/
+
+make_EHelper(addi) {
+  // 将计算的结果保存在目标寄存器的val字段中，然后写入reg
+  rtl_add(&id_dest->val, &id_src->val, &id_src2->val);  
+  rtl_sr(id_dest->reg, &id_dest->val, 4); 
 }
 
-make_EHelper(auipc){
-  rtl_add(&id_dest->val,&cpu.pc,&id_src->val);
-  rtl_sr(id_dest->reg,&id_dest->val,4);
-
-  print_asm_template2(auipc);
+make_EHelper(slti) {
+  rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+  // rtl_li(&id_dest->val, interpret_relop(RELOP_LT, id_src->val, id_src2->val));
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+  print_asm_template2(slti);
 }
 
-make_EHelper(i_funct3){
-  switch(decinfo.isa.instr.funct3){
-    case 0: //addi
-      rtl_add(&id_dest->val,&id_src->val,&id_src2->val);
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(addi);
+make_EHelper(sltiu) {
+  rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
+  // rtl_li(&id_dest->val, interpret_relop(RELOP_LTU, id_src->val, id_src2->val));
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+  print_asm_template2(sltiu);
+}
+
+make_EHelper(xori) {
+  rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+  print_asm_template2(xori);
+}
+
+make_EHelper(ori) {
+  rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+  print_asm_template2(ori);
+}
+
+make_EHelper(andi) {
+  rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+  print_asm_template2(andi);
+}
+
+make_EHelper(slli) {
+  rtl_shl(&id_dest->val, &id_src->val, &id_src2->reg);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+  print_asm_template2(slli); 
+}
+
+make_EHelper(sr_li_ai) {
+  switch(decinfo.isa.instr.funct7) {
+    case 0b0000000:  
+      // srli 
+      rtl_shr(&id_dest->val, &id_src->val, &id_src2->reg);
+      print_asm_template2(srli); 
       break;
-    case 1: //slli
-      rtl_shl(&id_dest->val,&id_src->val,&id_src2->reg);
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(slli);
+    
+    case 0b0100000: 
+      // srai
+      rtl_sar(&id_dest->val, &id_src->val, &id_src2->reg);
+      print_asm_template2(srai);
       break;
-    case 2: //slti
-      id_dest->val=(signed)id_src->val<(signed)id_src2->val;
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(slti);
-      break;
-    case 3: //sltiu
-      id_dest->val=(unsigned)id_src->val<(unsigned)id_src2->val;
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(sltiu);
-      break;
-    case 4: //xori
-      rtl_xor(&id_dest->val,&id_src->val,&id_src2->val);
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(xori);
-      break;
-    case 5: //srli&&srai
-      if(decinfo.isa.instr.funct7==0b0000000){ //srli
-        rtl_shr(&id_dest->val,&id_src->val,&id_src2->reg);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template2(srli);
-      }
-      else if(decinfo.isa.instr.funct7==0b0100000){ //srai
-        rtl_sar(&id_dest->val,&id_src->val,&id_src2->reg);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template2(srai);
-      }
-      break;
-    case 6: //ori
-      rtl_or(&id_dest->val,&id_src->val,&id_src2->val);
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(ori);
-      break;
-    case 7: //andi
-      rtl_and(&id_dest->val,&id_src->val,&id_src2->val);
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template2(andi);
-      break;
+    default: 
+      assert(0);
   }
+  
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
 }
 
-make_EHelper(r_funct3){
-  switch(decinfo.isa.instr.funct3){
-    case 0: //add&&sub&&mul
-      if(decinfo.isa.instr.funct7==0b0000000){ //add
-        rtl_add(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(add);
-      }
-      else if(decinfo.isa.instr.funct7==0b0100000){ //sub
-        rtl_sub(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(sub);
-      }
-      else if(decinfo.isa.instr.funct7==0b0000001){ //mul
-        rtl_imul_lo(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(mul);
-      }
+
+/************ R instructions ************/
+
+make_EHelper(add_sub) {
+  switch(decinfo.isa.instr.funct7) {
+    case 0b0000000: 
+      // add
+      rtl_add(&id_dest->val, &id_src->val, &id_src2->val); 
+      print_asm_template3(add);
       break;
-    case 1: //sll&&mulh
-      if(decinfo.isa.instr.funct7==0b0000000){ //sll
-        rtl_shl(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(sll); 
-      }
-      else if(decinfo.isa.instr.funct7==0b0000001){ //mulh
-        rtl_imul_hi(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(mulh);
-      }
+
+    case 0b0100000: 
+      // sub
+      rtl_sub(&id_dest->val, &id_src->val, &id_src2->val);
+      print_asm_template3(sub);
       break;
-    case 2: //slt
-      id_dest->val=(signed)id_src->val<(signed)id_src2->val;
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template3(slt);
-      break;
-    case 3: //sltu
-      id_dest->val=(unsigned)id_src->val<(unsigned)id_src2->val;
-      rtl_sr(id_dest->reg,&id_dest->val,4);
-      print_asm_template3(sltu);
-      break;
-    case 4: //xor&&div
-      if(decinfo.isa.instr.funct7==0b0000000){ //xor
-        rtl_xor(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(xor);
-      }
-      else if(decinfo.isa.instr.funct7==0b0000001){ //div
-        rtl_idiv_q(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(div);
-      }
-      break;
-    case 5: //srl&&sra&&divu
-      if(decinfo.isa.instr.funct7==0b0000000){ //srl
-        rtl_shr(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template2(srl);
-      }
-      else if(decinfo.isa.instr.funct7==0b0100000){ //sra
-        rtl_sar(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template2(sra);
-      }
-      else if(decinfo.isa.instr.funct7==0b0000001){ //divu
-        rtl_div_q(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(divu);
-      }
-      break;
-    case 6: //or&&rem
-      if(decinfo.isa.instr.funct7==0b0000000){ //or
-        rtl_or(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(or);
-      }
-      else if(decinfo.isa.instr.funct7==0b0000001){ //rem
-        rtl_idiv_r(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(rem);
-      }
-      break;
-    case 7: //and&&remu 
-      if(decinfo.isa.instr.funct7==0b0000000){ //and
-        rtl_and(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(and);
-      }
-      else if(decinfo.isa.instr.funct7==0b0000001){ //remu
-        rtl_div_r(&id_dest->val,&id_src->val,&id_src2->val);
-        rtl_sr(id_dest->reg,&id_dest->val,4);
-        print_asm_template3(remu);
-      }
-      break;
+    default: 
+      assert(0);
   }
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+}
+
+make_EHelper(sll) {
+  rtl_shl(&id_dest->val, &id_src->val, &id_src2->val);
+  print_asm_template3(sll); 
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+}
+
+// TODO: 这两个函数是否可以直接一步到位？不用先写入val成员？
+make_EHelper(slt) {
+  rtl_setrelop(RELOP_LT, &id_dest->val, &id_src->val, &id_src2->val);
+  // rtl_li(&id_dest->val, interpret_relop(RELOP_LT, id_src->val, id_src2->val));
+  print_asm_template3(slt);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+}
+
+make_EHelper(sltu) {
+  rtl_setrelop(RELOP_LTU, &id_dest->val, &id_src->val, &id_src2->val);
+  // rtl_li(&id_dest->val, interpret_relop(RELOP_LTU, id_src->val, id_src2->val));
+  print_asm_template3(sltu); 
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+}
+
+make_EHelper(xor) {
+  rtl_xor(&id_dest->val, &id_src->val, &id_src2->val);
+  print_asm_template3(xor);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+}
+
+make_EHelper(slr_sra) {
+  switch (decinfo.isa.instr.funct7)
+  {
+  case 0b0000000:
+    // slr
+    rtl_shr(&id_dest->val, &id_src->val, &id_src2->val);
+    print_asm_template3(srl); 
+    break;
+  case 0b0100000:
+    // sra
+    rtl_sar(&id_dest->val, &id_src->val, &id_src2->val);
+    print_asm_template3(sra);
+    break;
+  default:
+    assert(0);
+  }
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+}
+
+make_EHelper(or) {
+  rtl_or(&id_dest->val, &id_src->val, &id_src2->val);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
+
+  print_asm_template3(or);
+}
+
+make_EHelper(and) {
+  rtl_and(&id_dest->val, &id_src->val, &id_src2->val);
+  print_asm_template3(and);
+  rtl_sr(id_dest->reg, &id_dest->val, 4);
 }
