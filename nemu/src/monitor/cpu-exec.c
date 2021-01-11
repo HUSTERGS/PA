@@ -1,7 +1,6 @@
 #include "nemu.h"
 #include "monitor/monitor.h"
 #include "monitor/watchpoint.h"
-#include "monitor/diff-test.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -11,7 +10,10 @@
 #define MAX_INSTR_TO_PRINT 10
 
 /* restrict the size of log file */
-#define LOG_MAX (1024 * 1024 * 1024)
+#define LOG_MAX (1024 * 1024)
+
+uint32_t expr(char *e, bool *success);
+WP* get_head();
 
 NEMUState nemu_state = {.state = NEMU_STOP};
 
@@ -47,15 +49,6 @@ void cpu_exec(uint64_t n) {
     __attribute__((unused)) vaddr_t seq_pc = exec_once();
 
 #if defined(DIFF_TEST)
-  // uint32_t instr = vaddr_read(ori_pc, 4);
-  // if ((instr&0x7f) == 0b1100111) {
-  //   // jalr
-  //   Log("跳过");
-  //   difftest_skip_dut(1,2);
-  // } else if ((instr&0x7f) == 0b1101011) {
-  //   // nemu_trap
-  //   difftest_skip_ref();
-  // }
   difftest_step(ori_pc, cpu.pc);
 #endif
 
@@ -71,10 +64,20 @@ void cpu_exec(uint64_t n) {
   log_clearbuf();
 
     /* TODO: check watchpoints here. */
-  if (check_wps()) {
-    nemu_state.state = NEMU_STOP;
-    printf("监视点被触发\n");
+  bool flag=false,success=true;
+  WP *temp=get_head();
+  for(;temp!=NULL;temp=temp->next){
+    uint32_t res=expr(temp->str,&success);
+    if(res!=temp->value){
+      flag=true;
+      temp->value=res;
+    }
   }
+  if(flag){
+    printf("watchpoint status changed\n");
+    nemu_state.state=NEMU_STOP;
+  }
+
 #endif
 
   g_nr_guest_instr ++;

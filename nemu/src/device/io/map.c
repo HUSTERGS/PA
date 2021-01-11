@@ -5,7 +5,7 @@
 #define IO_SPACE_MAX (1024 * 1024)
 
 static uint8_t io_space[IO_SPACE_MAX] PG_ALIGN = {};
-static uint8_t *p_space = io_space; // p_space应该是用来标记当前可用的io地址的开始位置
+static uint8_t *p_space = io_space;
 
 uint8_t* new_space(int size) {
   uint8_t *p = p_space;

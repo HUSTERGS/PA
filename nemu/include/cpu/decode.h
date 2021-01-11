@@ -2,7 +2,7 @@
 #define __CPU_DECODE_H__
 
 #include "common.h"
-// 通过宏定义一系列的辅助函数
+
 #define make_DHelper(name) void concat(decode_, name) (vaddr_t *pc)
 typedef void (*DHelper) (vaddr_t *);
 

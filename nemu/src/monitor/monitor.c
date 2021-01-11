@@ -12,6 +12,7 @@ void init_difftest(char *ref_so_file, long img_size);
 static char *mainargs = "";
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
+//static char *img_file = "/home/hust/Desktop/PA/ics2019/nexus-am/tests/cputest/tests/sum.c";
 static char *img_file = NULL;
 static int is_batch_mode = false;
 
