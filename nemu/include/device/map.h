@@ -12,8 +12,8 @@ typedef struct {
   // we treat ioaddr_t as paddr_t here
   paddr_t low;
   paddr_t high;
-  uint8_t *space;
-  io_callback_t callback;
+  uint8_t *space; // 映射的目标空间
+  io_callback_t callback; // 回调函数
 } IOMap;
 
 static inline bool map_inside(IOMap *map, paddr_t addr) {

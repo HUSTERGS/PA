@@ -40,8 +40,85 @@ void reg_test() {
   assert(pc_sample == cpu.pc);
 }
 
-void isa_reg_display() {}
+void isa_reg_display() {
+  // QUESTION: 为何这个地方会变红，因为引用的问题吗
+  printf("eax: %08x\n", cpu.eax);
+  printf("ebx: %08x\n", cpu.ebx);
+  printf("ecx: %08x\n", cpu.ecx);
+  printf("edx: %08x\n", cpu.edx);
+  printf("ebp: %08x\n", cpu.ebp);
+  printf("esi: %08x\n", cpu.esi);
+  printf("edi: %08x\n", cpu.edi);
+  printf("esp: %08x\n", cpu.esp);
+  printf("pc: %08x\n", cpu.pc);
+}
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {
+  *success = true;
+  // 整个32位寄存器
+  if (!strcmp(s, "eax")) {
+    return cpu.eax;
+  } else if (!strcmp(s, "ebx")) {
+    return cpu.ebx;
+  } else if (!strcmp(s, "ecx")) {
+    return cpu.ecx;
+  } else if (!strcmp(s, "edx")) {
+    return cpu.edx;
+  } else if (!strcmp(s, "ebp")) {
+    return cpu.ebp;
+  } else if (!strcmp(s, "esi")) {
+    return cpu.esi;
+  } else if (!strcmp(s, "edi")) {
+    return cpu.edi;
+  } else if (!strcmp(s, "esp")) {
+    return cpu.esp;
+  } else if (!strcmp(s, "ebx")) {
+    return cpu.ebx;
+  } else if (!strcmp(s, "pc")) {
+    return cpu.pc;
+  } 
+  // 16位的寄存器
+  if (!strcmp(s, "ax")) {
+    return cpu.eax & 0xffff;
+  } else if (!strcmp(s, "bx")) {
+    return cpu.ebx & 0xffff;
+  } else if (!strcmp(s, "cx")) {
+    return cpu.ecx & 0xffff;
+  } else if (!strcmp(s, "dx")) {
+    return cpu.edx & 0xffff;
+  } else if (!strcmp(s, "bp")) {
+    return cpu.ebp & 0xffff;
+  } else if (!strcmp(s, "si")) {
+    return cpu.esi & 0xffff;
+  } else if (!strcmp(s, "di")) {
+    return cpu.edi & 0xffff;
+  } else if (!strcmp(s, "sp")) {
+    return cpu.esp & 0xffff;
+  } else if (!strcmp(s, "bx")) {
+    return cpu.ebx & 0xffff;
+  }
+
+  // 高8位
+  if (!strcmp(s, "ah")) {
+    return (cpu.eax >> 8) & 0xff;
+  } else if (!strcmp(s, "bh")) {
+    return (cpu.ebx >> 8) & 0xff;
+  } else if (!strcmp(s, "ch")) {
+    return (cpu.ecx >> 8) & 0xff;
+  } else if (!strcmp(s, "dh")) {
+    return (cpu.edx >> 8) & 0xff;
+  } 
+
+  // 低八位
+  if (!strcmp(s, "al")) {
+    return cpu.eax & 0xff;
+  } else if (!strcmp(s, "bl")) {
+    return cpu.ebx & 0xff;
+  } else if (!strcmp(s, "cl")) {
+    return cpu.ecx & 0xff;
+  } else if (!strcmp(s, "dl")) {
+    return cpu.edx & 0xff;
+  } 
+  *success = false;
   return 0;
 }

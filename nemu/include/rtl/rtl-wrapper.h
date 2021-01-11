@@ -17,6 +17,9 @@
 #define rtl_sar       concat(RTL_PREFIX, _rtl_sar     )
 #define rtl_mul_lo    concat(RTL_PREFIX, _rtl_mul_lo  )
 #define rtl_mul_hi    concat(RTL_PREFIX, _rtl_mul_hi  )
+// RV32M mulhsu
+#define rtl_mul_hsu   concat(RTL_PREFIX, _rtl_mul_hsu )
+
 #define rtl_imul_lo   concat(RTL_PREFIX, _rtl_imul_lo )
 #define rtl_imul_hi   concat(RTL_PREFIX, _rtl_imul_hi )
 #define rtl_div_q     concat(RTL_PREFIX, _rtl_div_q   )
@@ -27,9 +30,9 @@
 #define rtl_div64_r   concat(RTL_PREFIX, _rtl_div64_r )
 #define rtl_idiv64_q  concat(RTL_PREFIX, _rtl_idiv64_q)
 #define rtl_idiv64_r  concat(RTL_PREFIX, _rtl_idiv64_r)
-#define rtl_lm        concat(RTL_PREFIX, _rtl_lm      )
-#define rtl_sm        concat(RTL_PREFIX, _rtl_sm      )
-#define rtl_host_lm   concat(RTL_PREFIX, _rtl_host_lm )
+#define rtl_lm        concat(RTL_PREFIX, _rtl_lm      ) // $2[len] -> $1
+#define rtl_sm        concat(RTL_PREFIX, _rtl_sm      ) // $2 -> $1[len]
+#define rtl_host_lm   concat(RTL_PREFIX, _rtl_host_lm ) 
 #define rtl_host_sm   concat(RTL_PREFIX, _rtl_host_sm )
 #define rtl_setrelop  concat(RTL_PREFIX, _rtl_setrelop)
 #define rtl_j         concat(RTL_PREFIX, _rtl_j       )
