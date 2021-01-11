@@ -1,52 +1,36 @@
 #include "proc.h"
 #include <elf.h>
+#include <fs.h>
 
 #ifdef __ISA_AM_NATIVE__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr
-# define PHOFF 64
-
 #else
 # define Elf_Ehdr Elf32_Ehdr
 # define Elf_Phdr Elf32_Phdr
-# define PHOFF 52
-
 #endif
 
-/**
- * Elf_Ehdr  - ELF header信息
- *     e_entry    -程序入口地址，也就是第一条指令的地址
- */
-
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
-size_t ramdisk_write(const void *buf, size_t offset, size_t len);
-size_t get_ramdisk_size();
-
-extern uint8_t ramdisk_start;
-extern uint8_t ramdisk_end;
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  Elf_Ehdr elf;
-  Elf_Phdr ph;
-
-
-  size_t ret = ramdisk_read(&elf, 0, PHOFF);
-  assert(ret == PHOFF);
-  
-  volatile uint32_t entry = elf.e_entry;
-  // printf("entry = %x\n", entry);
-  // printf("phoff = %x\n", elf.e_phoff);
-  // printf("phnum = %x\n", elf.e_phnum);
-
-  for(int i = 0; i < elf.e_phnum; i++){
-    ramdisk_read(&ph, elf.e_phoff * (i + 1),sizeof(Elf_Phdr)); 
-    //printf("offset = %x,  vaddr = %x, paddr = %x, filesz = %d, memsz = %d\n",ph.p_offset, ph.p_vaddr, ph.p_paddr, ph.p_filesz, ph.p_memsz);
-    if (ph.p_type != PT_LOAD) continue;
-    ramdisk_read((void *)ph.p_vaddr, ph.p_offset, ph.p_filesz);
-    memset((void *)(ph.p_vaddr + ph.p_filesz), 0, ph.p_memsz - ph.p_filesz);
+  Elf_Ehdr head;
+  //ramdisk_read(&head,0,sizeof(head));
+  int fd=fs_open(filename,0,0);
+  fs_lseek(fd,0,SEEK_SET);
+  fs_read(fd,&head,sizeof(head));
+  for(int i=0;i<head.e_phnum;i++){
+    Elf_Phdr temp;
+    //ramdisk_read(&temp,head.e_phoff+i*head.e_phentsize,sizeof(temp));
+    fs_lseek(fd,head.e_phoff+i*head.e_phentsize,SEEK_SET);
+    fs_read(fd,&temp,sizeof(temp));
+    if(temp.p_type==PT_LOAD){
+      //ramdisk_read((void*)temp.p_vaddr,temp.p_offset,temp.p_filesz);
+      fs_lseek(fd,temp.p_offset,SEEK_SET);
+      fs_read(fd,(void*)temp.p_vaddr,temp.p_filesz);
+      memset((void*)(temp.p_vaddr+temp.p_filesz),0,temp.p_memsz-temp.p_filesz);
+    }
   }
-
-  return entry;
+  return head.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
