@@ -849,16 +849,13 @@ _VFPRINTF_R (struct _reent *data,
 
 #ifndef STRING_ONLY
 	/* Initialize std streams if not dealing with sprintf family.  */
-	
 	CHECK_INIT (data, fp);
-	
 	_newlib_flockfile_start (fp);
-	
+
 	ORIENT(fp, -1);
 
 	/* sorry, fprintf(read_only_file, "") returns EOF, not 0 */
 	if (cantwrite (data, fp)) {
-		
 		_newlib_flockfile_exit (fp);
 		return (EOF);
 	}
@@ -899,7 +896,6 @@ _VFPRINTF_R (struct _reent *data,
 	numargs = 0;
 	is_pos_arg = 0;
 #endif
-
 
 	/*
 	 * Scan the format for conversions (`%' character).
