@@ -9,6 +9,7 @@ int main() {
   // write(1, "Hello World!\n", 13);
   char s[10] = "123";
   sprintf(s, "456");
+  write(1, s, 10);
   // int i = 2;
   // volatile int j = 0;
   // // while (1) {
