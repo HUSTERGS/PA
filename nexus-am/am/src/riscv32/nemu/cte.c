@@ -1,6 +1,6 @@
 #include <am.h>
 #include <riscv32.h>
-
+// #include "syscall.h"
 static _Context* (*user_handler)(_Event, _Context*) = NULL;
 
 _Context* __am_irq_handle(_Context *c) {
@@ -10,6 +10,7 @@ _Context* __am_irq_handle(_Context *c) {
   if (user_handler) {
     _Event ev = {0};
     switch (c->cause) {
+      case 1: ev.event = _EVENT_SYSCALL;break;
       case 9: ev.event = _EVENT_YIELD; break;
       default: ev.event = _EVENT_ERROR; break;
     }
