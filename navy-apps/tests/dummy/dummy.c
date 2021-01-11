@@ -9,6 +9,6 @@ int main() {
   // printf("进入dummy");
   // assert(0);
   
-  // return _syscall_(SYS_yield, 0, 0, 0);
+  return _syscall_(SYS_yield, 0, 0, 0);
   return 0;
 }

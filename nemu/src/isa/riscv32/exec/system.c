@@ -52,7 +52,8 @@ make_EHelper(ECALL_EBREAK) {
         switch (decinfo.isa.instr.simm11_0) {
           case 0b000000000000: 
             /* ECALL */ 
-            raise_intr(9, cpu.pc); 
+
+            raise_intr(cpu.gpr[17]._32, cpu.pc); 
             print_asm_template1(ecall); 
             break;
           case 0b000000000001: 
