@@ -1,10 +1,15 @@
 #include "common.h"
 #include "syscall.h"
 
+extern int _write(int fd, void *buf, size_t count);
+
 _Context* do_syscall(_Context *c) {
   Log("进入do_syscall");
   uintptr_t a[4];
   a[0] = c->GPR1;
+  a[1] = c->GPR2;
+  a[2] = c->GPR3;
+  a[3] = c->GPR4;
   // 针对不同的系统调用号来进行分发
   // GPR1 调用类型
   // GPR2 - 4 arg0 - arg3
@@ -12,6 +17,24 @@ _Context* do_syscall(_Context *c) {
   switch (a[0]) {
     case SYS_exit: _halt(0); c->GPRx = 0; break;
     case SYS_yield:  _yield();c->GPRx = 0; break;
+    case SYS_open: ; break;
+    case SYS_read: break;
+    case SYS_write: 
+    case SYS_kill: break;
+    case SYS_getpid: break;
+    case SYS_close: break;
+    case SYS_lseek: break;
+    case SYS_brk: break;
+    case SYS_fstat: break;
+    case SYS_time: break;
+    case SYS_signal: break;
+    case SYS_execve: break;
+    case SYS_fork: break;
+    case SYS_link: break;
+    case SYS_unlink: break;
+    case SYS_wait: break;
+    case SYS_times: break;
+    case SYS_gettimeofday: break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
