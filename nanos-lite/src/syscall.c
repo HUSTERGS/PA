@@ -5,7 +5,7 @@ extern int _write(int fd, void *buf, size_t count);
 
 _Context* do_syscall(_Context *c) {
   Log("进入do_syscall%d", c->GPR1);
-  uintptr_t a[4];
+  intptr_t a[4];
   a[0] = c->GPR1;
   a[1] = c->GPR2;
   a[2] = c->GPR3;
@@ -25,9 +25,14 @@ _Context* do_syscall(_Context *c) {
        * a[2] void * buf 
        * a[3] size_t count
        */
-      if (a[1] == 1 || a[1] == 2) {
+      Log("进入write");
+      // a[1] = c->GPR2;
+
+      Log("fd = %d", *(int *)(a[1]));
+      if (*(int *)(a[1]) == 1 || *(int *)(a[1]) == 2) {
+
         for (int i = 0; i < (size_t) (a[3]); i++) {
-          _putc((*(char *)(a[2]) + i));
+          _putc(*((char *)(*(void **)(a[2])) + i));
         }
       }
       c->GPRx = a[3];
