@@ -1001,8 +1001,9 @@ reswitch:	switch (ch) {
 				}
 			}
 #endif /* !_NO_POS_ARGS */
-
+			write(1, "printf function\n", 16);
 			/*
+			
 			 * ``A negative field width argument is taken as a
 			 * - flag followed by a positive field width.''
 			 *	-- ANSI X3J11
