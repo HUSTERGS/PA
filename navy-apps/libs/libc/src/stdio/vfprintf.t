@@ -799,6 +799,7 @@ _VFPRINTF_R (struct _reent *data,
 }
 #define FLUSH()
 #endif
+  write(1, "printf function\n", 16);
 
 	/* Macros to support positional arguments */
 #ifndef _NO_POS_ARGS
@@ -1001,9 +1002,8 @@ reswitch:	switch (ch) {
 				}
 			}
 #endif /* !_NO_POS_ARGS */
-			write(1, "printf function\n", 16);
+
 			/*
-			
 			 * ``A negative field width argument is taken as a
 			 * - flag followed by a positive field width.''
 			 *	-- ANSI X3J11
