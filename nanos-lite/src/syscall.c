@@ -29,6 +29,7 @@ _Context* do_syscall(_Context *c) {
       // a[1] = c->GPR2;
 
       Log("fd = %d", *(int *)(a[1]));
+      Log("尬住了");
       if (*(int *)(a[1]) == 1 || *(int *)(a[1]) == 2) {
 
         for (int i = 0; i < *(size_t *) (a[3]); i++) {
