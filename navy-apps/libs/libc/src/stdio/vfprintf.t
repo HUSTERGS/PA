@@ -855,9 +855,10 @@ _VFPRINTF_R (struct _reent *data,
 	_newlib_flockfile_start (fp);
 	
 	ORIENT(fp, -1);
-write(1, "printf function\n", 16);
+
 	/* sorry, fprintf(read_only_file, "") returns EOF, not 0 */
 	if (cantwrite (data, fp)) {
+		write(1, "printf function\n", 16);
 		_newlib_flockfile_exit (fp);
 		return (EOF);
 	}
