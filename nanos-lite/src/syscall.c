@@ -4,7 +4,7 @@
 extern int _write(int fd, void *buf, size_t count);
 
 _Context* do_syscall(_Context *c) {
-  Log("进入do_syscall");
+  Log("进入do_syscall%d", c->GPR1);
   uintptr_t a[4];
   a[0] = c->GPR1;
   a[1] = c->GPR2;
