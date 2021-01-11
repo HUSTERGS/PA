@@ -29,14 +29,12 @@ _Context* do_syscall(_Context *c) {
       // a[1] = c->GPR2;
 
       Log("fd = %d", *(int *)(a[1]));
-      for (int i = 0; i < *(size_t *) (a[3]); i++) {
+      if (*(int *)(a[1]) == 1 || *(int *)(a[1]) == 2) {
+
+        for (int i = 0; i < *(size_t *) (a[3]); i++) {
           _putc(*((char *)(*(void **)(a[2])) + i));
         }
-      // if (*(int *)(a[1]) == 1 || *(int *)(a[1]) == 2) {
-      //   for (int i = 0; i < *(size_t *) (a[3]); i++) {
-      //     _putc(*((char *)(*(void **)(a[2])) + i));
-      //   }
-      // }
+      }
       c->GPRx = a[3];
       break;
     case SYS_kill: break;
