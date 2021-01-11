@@ -56,7 +56,7 @@ _Context* do_syscall(_Context *c) {
       // #else
       //   return 0;
       // #endif
-      c->GPRx = -1;
+      c->GPRx = 0;
       break;
     case SYS_fstat: break;
     case SYS_time: break;
