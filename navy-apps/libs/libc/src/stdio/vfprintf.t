@@ -816,6 +816,7 @@ _VFPRINTF_R (struct _reent *data,
 #else
 # define GET_ARG(n, ap, type) (va_arg (ap, type))
 #endif
+  write(1, "printf function\n", 16);
 
 	/*
 	 * To extend shorts properly, we need both signed and unsigned
@@ -851,7 +852,6 @@ _VFPRINTF_R (struct _reent *data,
 	/* Initialize std streams if not dealing with sprintf family.  */
 	CHECK_INIT (data, fp);
 	_newlib_flockfile_start (fp);
-  write(1, "printf function\n", 16);
 
 	ORIENT(fp, -1);
 
