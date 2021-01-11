@@ -76,7 +76,7 @@ static int print_p(unsigned long p, int count, char * dst) {
 
 
 int printf(const char *fmt, ...) {
-  _putc('?');
+  // _putc('?');
   va_list ap;
   va_start(ap, fmt);
   int count = vsprintf(NULL, fmt, ap);
