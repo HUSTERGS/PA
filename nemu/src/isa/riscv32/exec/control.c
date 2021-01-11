@@ -21,6 +21,9 @@ static uint32_t branch_table[8] = {
 };
 
 make_EHelper(branch) {
+    // ？
+    decinfo.jmp_pc=cpu.pc+id_dest->val;
+    
     rtl_jrelop(branch_table[decinfo.isa.instr.funct3], &id_src->val, &id_src2->val, decinfo.jmp_pc);
     
     switch (branch_table[decinfo.isa.instr.funct3]) {
@@ -59,7 +62,7 @@ make_EHelper(jalr) {
     decinfo.jmp_pc=(id_src->val+id_src2->val)&~1;
     rtl_j(decinfo.jmp_pc);
 
-    // difftest_skip_dut(1, 2); //difftest
+    difftest_skip_dut(1, 2); //difftest
 
     print_asm_template2(jalr);
 }

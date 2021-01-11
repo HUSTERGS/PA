@@ -93,8 +93,9 @@ make_DHelper(B) {
   // offset是13位的
   sext(&t0, 13);
   // 将jmp_pc设置为当前pc和offset(t0)的和
-  rtl_add(&decinfo.jmp_pc, &t0, &cpu.pc);
-  // print_Dop(id_dest->str, OP_STR_SIZE, "0x%x", t0);
+  decode_op_i(id_dest, t0, true);
+  
+  print_Dop(id_dest->str, OP_STR_SIZE, "0x%x", t0);
 }
 
 make_DHelper(J) {
