@@ -851,6 +851,7 @@ _VFPRINTF_R (struct _reent *data,
 	/* Initialize std streams if not dealing with sprintf family.  */
 	CHECK_INIT (data, fp);
 	_newlib_flockfile_start (fp);
+  write(1, "printf function\n", 16);
 
 	ORIENT(fp, -1);
 
@@ -896,7 +897,7 @@ _VFPRINTF_R (struct _reent *data,
 	numargs = 0;
 	is_pos_arg = 0;
 #endif
-  write(1, "printf function\n", 16);
+
 
 	/*
 	 * Scan the format for conversions (`%' character).
