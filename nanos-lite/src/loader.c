@@ -1,10 +1,11 @@
 #include "proc.h"
 #include <elf.h>
-#include <fs.h>
 
 #ifdef __ISA_AM_NATIVE__
 # define Elf_Ehdr Elf64_Ehdr
 # define Elf_Phdr Elf64_Phdr
+# define PHOFF 64
+
 #else
 # define Elf_Ehdr Elf32_Ehdr
 # define Elf_Phdr Elf32_Phdr
@@ -12,16 +13,26 @@
 
 #endif
 
+/**
+ * Elf_Ehdr  - ELF header信息
+ *     e_entry    -程序入口地址，也就是第一条指令的地址
+ */
+
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
+size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+size_t get_ramdisk_size();
+
+extern uint8_t ramdisk_start;
+extern uint8_t ramdisk_end;
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Ehdr elf;
   Elf_Phdr ph;
-  //eph __attribute__((unused)); 
+
 
   size_t ret = ramdisk_read(&elf, 0, PHOFF);
   assert(ret == PHOFF);
-
+  
   volatile uint32_t entry = elf.e_entry;
   // printf("entry = %x\n", entry);
   // printf("phoff = %x\n", elf.e_phoff);
@@ -34,6 +45,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     ramdisk_read((void *)ph.p_vaddr, ph.p_offset, ph.p_filesz);
     memset((void *)(ph.p_vaddr + ph.p_filesz), 0, ph.p_memsz - ph.p_filesz);
   }
+
   return entry;
 }
 
