@@ -3,180 +3,142 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-// 根据dst是否为NULL来判断应该输出到标准输出还是输出到dst
-static void putc(char * dst, char ch, int offset) {
-  if (dst) {
-    dst[offset] = ch;
-  } else {
-    _putc(ch);
-  }
+struct param {
+	char uc:1;
+	char sign;			/* '-' 				 */
+	unsigned int base;	/* number base, e.g 8, 10, 16*/
+	char *bf;			/* buffer for output */
+};
+typedef void (*putcf) (void *, char);
+
+struct _vsprintf_putcf_data {
+	char *dest;
+	size_t num_chars;
+};
+
+static void _vsprintf_putcf(void *p, char c) {
+	struct _vsprintf_putcf_data *data = (struct _vsprintf_putcf_data *)p;
+	data->dest[data->num_chars ++] = c;
 }
 
-static int int_width(long value, int base) {
-  int count = 1;
-  while (value / base) {
-    count++;
-    value /= base;
-  }
-  return count;
+static void _printf_putc(void *p, char c) {  
+	_putc(c);
 }
 
-
-static int print_s(const char * data, char * dst) {
-  const char * count = data;
-  while (*count) {
-    putc(dst, *count, count - data);
-    // if (dst) {
-    //   putc(dst + (count - data), *count, 0);
-    // } else {
-    //   putc(NULL, *count, 0);
-    // }
-    count++;
-  }
-  return count - data;
+static void putchw(void *putp, putcf putf, struct param *p) {
+	char ch;
+	char *bf = p->bf;
+	while((ch = *bf++)) 
+		putf(putp, ch);
 }
 
-static char int_to_ch(int value) {
-  // assert(value >= 0);
-  if (value < 10) {
-    return value + '0';
-  } else {
-    return value - 10 + 'a';
-  }
+static void ui2a(unsigned int num, struct param *p) {
+	int n = 0;
+	unsigned int d = 1;
+	char *bf = p->bf;
+	while (num / d >= p->base)
+		d = d * p->base;
+
+	while (d != 0) {
+		int dgt = num /d;
+		num = num % d;
+		d = d / p->base;
+		if (n || dgt > 0 || d == 0) {
+			*bf++ = dgt + (dgt < 10 ? '0' : (p->uc ? 'A' : 'a') - 10);
+			++n;
+		}
+	}
+	*bf = 0;
 }
-
-static int print_d(long d, int count, char * dst, int base) {
-  assert(base == 10 || base == 16);
-  if (d < 0) {
-    putc(dst, '-', count);
-    return print_d(-d, count, dst ? dst+1 : dst, base) +1;
-  }
-  
-  if (d / base) {
-    count += print_d(d / base, count, dst, base);
-    putc(dst, int_to_ch(d % base), count);
-  } else {
-    putc(dst, int_to_ch(d), count);
-  }
-  return count + 1;
-}
-
-
-static int print_p(unsigned long p, int count, char * dst) {
-  unsigned int base = 16;
-  assert(p >= 0);
-  if (p / base) {
-    count += print_p(p / base, count, dst);
-    putc(dst, int_to_ch(p % base), count);
-  } else {
-    putc(dst, int_to_ch(p), count);
-  }
-  return count + 1;
+static void i2a (int num, struct param *p) {
+	//printf("num = %d\n", num);
+	if (num < 0) {
+		num = -num;
+		p->sign = '-';
+	}
+	ui2a(num, p);
 }
 
 
-int printf(const char *fmt, ...) {
-  // _putc('?');
-  va_list ap;
-  va_start(ap, fmt);
-  int count = vsprintf(NULL, fmt, ap);
-  va_end(ap);
-  putc(NULL, '\0', count);
-  return count;
+void my_format(void *putp, putcf putf, const char *fmt, va_list va) {
+	struct param p;
+	char bf[12];	/* int = 32b */
+	char ch;
+	p.bf = bf;
+
+	while ((ch = *(fmt++))) {
+		if (ch != '%') {
+			putf(putp, ch);
+		} else {
+			ch = *(fmt++);
+			switch (ch) {
+				case 'd':
+					p.base = 10;
+					p.uc = 0;
+					i2a(va_arg(va, int), &p);
+					putchw(putp, putf, &p);
+					break;
+				case 'x' :
+					p.base = 16;
+					p.uc = 0;
+					i2a(va_arg(va, int), &p);
+					putchw(putp, putf, &p);
+					break;
+				case 's':
+					p.bf = va_arg(va, char *);
+					putchw(putp, putf, &p);
+				    p.bf = bf; //???
+					break;
+				default : break;
+			}
+		}
+
+	}
 }
 
-
-
-// static void print_bits(long value) {
-//   while (value / 16) {
-//     _putc(int_to_ch(value % 16));
-//     value /= 16;
-//   }
-// }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
+	struct _vsprintf_putcf_data data;
+	data.dest = out;
+	data.num_chars = 0;
+	my_format(&data, _vsprintf_putcf, fmt, ap);
+	data.dest[data.num_chars] = '\0';
 
-  char *s;
-  long d;
-  char ch;
-  int count = 0;
-  int width;
-  while((ch = *fmt++)) {
-    if (ch != '%') {
-      putc(out, ch, count);
-      count++;
-      continue;
-    }
-    switch (*fmt++)
-    {
-    case 's':
-      s = va_arg(ap, char *);
-      count += out ? print_s(s, out + count) : print_s(s, NULL);
-      break;
-    case 'd':
-      d = va_arg(ap, int);
-      // print_bits(d);
-      count += out ? print_d(d, 0, out + count, 10) : print_d(d, 0, NULL, 10);
-      break;
-    // 在pa2.3中的mainarg的main.c中使用了%c，如果klib使用自己的话就需要实现%c
-    case 'c':
-      ch = va_arg(ap, int);
-      putc(out, ch, count);
-      count++;
-      break;
-    // 16进制
-    case 'x':
-      d = va_arg(ap, int);
-      count += out ? print_p(d, 0, out + count) : print_p(d, 0, NULL);
-      break;
-    case 'p':
-      d = va_arg(ap, unsigned long);
-      putc(out, '0', count++);
-      putc(out, 'x', count++);
-      count += print_p(d, 0, out ? out + count : out);
-      // count += out ? print_p(d, 0, out + count) : print_p(d, 0, NULL);
-      break;
-    case '0':
-      // 遇到0，之后的数字就是长度
-
-      width = *fmt++ - '0';
-      d = va_arg(ap, int);
-      // 直接向对应的位置填充width - actual_witdth个字符
-      for (int i = 0; i < width - int_width(d, *fmt == 'd' ? 10 : 16); i++) {
-        putc(out, '0', count + i);
-      }
-      assert(width == 8);
-      if (*fmt == 'd') {
-        out ? print_d(d, 0, out + count, 10) : print_d(d, 0, NULL, 10);
-        count += width;
-      } else if (*fmt == 'x') {
-        out ? print_d(d, 0, out + count, 16) : print_d(d, 0, NULL, 16);
-        count += width;
-      } else {
-        assert(0);
-      }
-      fmt++;
-    default:
-      assert(0);
-    }
-  }
-  return count;
+	return data.num_chars;
+}
+static inline void _putstr(char *s) {
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-  // assert(0);
-  // printf("lulalal");
-  va_list ap;
-  va_start(ap, fmt);
-  int count = vsprintf(out, fmt, ap);
-  va_end(ap);
-  // 应该最后要打印一个结束符号？
-  putc(out, '\0', count);
-  return count;
+	va_list ap;
+	int ret;
+	
+	va_start(ap, fmt);
+	ret = vsprintf(out, fmt, ap);
+	va_end(ap);
+
+	return ret;
 }
 
-// TODO: snprintf
+int printf(const char *fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	my_format(NULL, _printf_putc, fmt, ap);
+	va_end(ap);
+
+	/*
+		0x3F8 
+		printf -> _putc(ch) -> putchar(0x3F8, ch) -> outb(addr, ch) -> *addr = ch
+	 */
+	return 0;
+}
+/* snprintf()用于将格式化的数据写入字符串 
+ * out: 为要写入的字符串
+ * n  : 要写入的字符的最大数据，超过n会被截断
+ * fmt: 格式化字符串
+ */
 int snprintf(char *out, size_t n, const char *fmt, ...) {
+
   return 0;
 }
 

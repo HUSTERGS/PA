@@ -850,18 +850,18 @@ _VFPRINTF_R (struct _reent *data,
 #ifndef STRING_ONLY
 	/* Initialize std streams if not dealing with sprintf family.  */
 	
-	// CHECK_INIT (data, fp);
+	CHECK_INIT (data, fp);
 	
 	_newlib_flockfile_start (fp);
 	
 	ORIENT(fp, -1);
 
 	/* sorry, fprintf(read_only_file, "") returns EOF, not 0 */
-	// if (cantwrite (data, fp)) {
+	if (cantwrite (data, fp)) {
 		
-	// 	_newlib_flockfile_exit (fp);
-	// 	return (EOF);
-	// }
+		_newlib_flockfile_exit (fp);
+		return (EOF);
+	}
 
 #ifdef _UNBUF_STREAM_OPT
 	/* optimise fprintf(stderr) (and other unbuffered Unix files) */
