@@ -113,7 +113,7 @@ int _execve(const char *fname, char * const argv[], char *const envp[]) {
 // But to pass linking, they are defined as dummy functions
 
 int _fstat(int fd, struct stat *buf) {
-  assert(0);
+  // assert(0);
   return 0;
 }
 

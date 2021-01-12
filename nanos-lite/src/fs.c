@@ -54,7 +54,7 @@ static Finfo file_table[] __attribute__((used)) = {
 
 int fs_open(const char *pathname, int flags, int mode)
 {
-  Log("尝试打开文件%s", pathname);
+  // Log("尝试打开文件%s", pathname);
   for (int i = 0; i < NR_FILES; i++)
   {
     if (!strcmp(pathname, file_table[i].name))
