@@ -1,5 +1,14 @@
 #include "fs.h"
 
+extern size_t ramdisk_read(void*, size_t, size_t);
+extern size_t ramdisk_write(const void*, size_t, size_t);
+
+extern size_t events_read(void*, size_t, size_t);
+extern size_t dispinfo_read(void*, size_t, size_t);
+extern size_t serial_write(const void*, size_t, size_t);
+extern size_t fb_write(const void*, size_t, size_t);
+extern size_t fbsync_write(const void*, size_t, size_t);
+
 typedef size_t (*ReadFn)(void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn)(const void *buf, size_t offset, size_t len);
 
