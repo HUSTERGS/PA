@@ -44,10 +44,14 @@ size_t invalid_write(const void *buf, size_t offset, size_t len)
 
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
-    {"stdin", 0, 0, 0, invalid_read, invalid_write},
-    {"stdout", 0, 0, 0, invalid_read, serial_write},
-    {"stderr", 0, 0, 0, invalid_read, serial_write},
-    {"/dev/events", 0xffffff, 0, 0, events_read, invalid_write},
+  {"stdin", 0, 0, 0, invalid_read, invalid_write},
+  {"stdout", 0, 0, 0, invalid_read, serial_write},
+  {"stderr", 0, 0, 0, invalid_read, serial_write},
+  {"/dev/events", 0xffffff, 0, 0, events_read, invalid_write},
+  {"/dev/tty", 0, 0, 0, invalid_read, serial_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/dev/fbsync", 0xffff, 0, 0, invalid_read, fbsync_write},
+  {"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
@@ -94,7 +98,7 @@ size_t fs_read(int fd, void *buf, size_t len)
 size_t fs_write(int fd, const void *buf, size_t len)
 {
   // printf("fs_write = %s\n", (char *)buf);
-  if (fd >= 3 && (file_table[fd].open_offset + len > file_table[fd].size))
+  if (fd >= 5 && (file_table[fd].open_offset + len > file_table[fd].size))
   {
     if (file_table[fd].size > file_table[fd].open_offset)
       len = file_table[fd].size - file_table[fd].open_offset;
@@ -140,8 +144,8 @@ int fs_close(int fd)
 void init_fs()
 {
   // TODO: initialize the size of /dev/fb
-  // int fb = fs_open("/dev/fb", 0, 0);
-  // file_table[fb].size = screen_width() * screen_height() * 4;
+  int fb = fs_open("/dev/fb", 0, 0);
+  file_table[fb].size = screen_width() * screen_height() * 4;
   // for (int i = 0; i < NR_FILES; i++)
   // {
   //   // if (!strcmp(pathname, file_table[i].name))
