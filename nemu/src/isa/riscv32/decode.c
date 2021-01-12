@@ -91,7 +91,7 @@ make_DHelper(B) {
   t0 = (decinfo.isa.instr.simm12 << 12) | (decinfo.isa.instr.imm11 << 11) | 
        (decinfo.isa.instr.imm10_5 << 5) | (decinfo.isa.instr.imm4_1 << 1);
   // offset是13位的
-  // sext(&t0, 13);
+  sext(&t0, 13);
   // 将jmp_pc设置为当前pc和offset(t0)的和
   decode_op_i(id_dest, t0, true);
   
@@ -103,7 +103,7 @@ make_DHelper(J) {
   t0 =  (decinfo.isa.instr.simm20 << 20) | (decinfo.isa.instr.imm19_12 << 12) | 
         (decinfo.isa.instr.imm11_ << 11) | (decinfo.isa.instr.imm10_1 << 1);
   // imm是21位的
-  // sext(&t0, 21);
+  sext(&t0, 21);
   
   decode_op_i(id_src , t0, true);
   decode_op_r(id_dest, decinfo.isa.instr.rd, false);
