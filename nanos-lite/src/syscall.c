@@ -23,8 +23,7 @@ static inline int do_read(int fd, void * buf, size_t count) {
 }
 
 static inline int do_write(int fd, const void * buf, size_t count) {
-  int res = fs_write(fd, buf, count);
-  return res;
+  return fs_write(fd, buf, count);
 }
 
 static inline size_t do_lseek(int fd, size_t offset, int whence) {
