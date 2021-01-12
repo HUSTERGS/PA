@@ -10,7 +10,7 @@ int main() {
   // char s[10] = "123";
   // sprintf(s+3, "456");
   // write(1, s, 10);
-  printf("123456");
+  printf("");
   // int i = 2;
   // volatile int j = 0;
   // // while (1) {
