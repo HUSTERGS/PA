@@ -72,6 +72,7 @@ int _write(int fd, void *buf, size_t count) {
 }
 
 void *_sbrk(intptr_t increment) {
+  
   static int program_break = 0;
   if (program_break == 0) {
     program_break = &end;
