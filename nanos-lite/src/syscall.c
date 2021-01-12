@@ -37,7 +37,7 @@ int do_brk(int addr) {
 
 _Context* do_syscall(_Context *c) {
   // Log("进入do_syscall%d", c->GPR1);
-  uintptr_t a[4];
+  intptr_t a[4];
   a[0] = c->GPR1;
   a[1] = c->GPR2;
   a[2] = c->GPR3;
