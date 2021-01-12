@@ -45,8 +45,8 @@ size_t invalid_write(const void *buf, size_t offset, size_t len)
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
     {"stdin", 0, 0, invalid_read, invalid_write},
-    {"stdout", 0, 0, invalid_read, invalid_write},
-    {"stderr", 0, 0, invalid_read, invalid_write},
+    {"stdout", 0, 0, invalid_read, serial_write},
+    {"stderr", 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
 
@@ -101,6 +101,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
   }
   if (!file_table[fd].write)
   {
+    Log("文件编号fd为%d, write函数为NULL? %d", fd, file_table[fd].write == NULL);
     ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
   }
   else
