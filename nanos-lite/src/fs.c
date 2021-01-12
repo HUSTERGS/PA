@@ -101,7 +101,7 @@ size_t fs_write(int fd, const void *buf, size_t len)
   }
   if (!file_table[fd].write)
   {
-    Log("文件编号fd为%d, write函数为NULL? %d", fd, file_table[fd].write == NULL);
+    // Log("文件编号fd为%d, write函数为NULL? %d", fd, file_table[fd].write == NULL);
     ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
   }
   else
@@ -140,4 +140,18 @@ void init_fs()
   // TODO: initialize the size of /dev/fb
   // int fb = fs_open("/dev/fb", 0, 0);
   // file_table[fb].size = screen_width() * screen_height() * 4;
+  for (int i = 0; i < NR_FILES; i++)
+  {
+    // if (!strcmp(pathname, file_table[i].name))
+    // {
+    //   return i;
+    // }
+    printf("filename = %s", file_table[i].name);
+    if (file_table[i].write) {
+      printf("write function = %p\n", file_table[i].write);
+    } else {
+      printf("write function is NULL\n");
+    }
+  }
+  // assert(0 && "Can't find file");
 }
