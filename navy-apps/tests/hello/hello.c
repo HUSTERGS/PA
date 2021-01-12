@@ -2,15 +2,7 @@
 #include <stdio.h>
 
 int main() {
-  // write(1, "Enter hello.c file\n", 19);
-  // write(1, "Hello World!\n", 13);
-  // // write(1, "Hello World!\n", 13);
-  // // write(1, "Hello World!\n", 13);
-  // // write(1, "Hello World!\n", 13);
-  // char s[10] = "123";
-  // sprintf(s+3, "456");
-  // write(1, s, 10);
-  // printf("12345");
+  write(1, "Enter hello.c file\n", 19);
   int i = 2;
   volatile int j = 0;
   while (1) {
@@ -20,7 +12,5 @@ int main() {
       j = 0;
     }
   }
-  // // printf("111");
-  // write(1, "Exit hello.c file\n", 18);
   return 0;
 }
