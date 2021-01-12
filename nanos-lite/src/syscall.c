@@ -61,7 +61,7 @@ _Context* do_syscall(_Context *c) {
        * a[2] void * buf 
        * a[3] size_t count
        */
-      Log("进入write");
+      // Log("进入write");
       // a[1] = c->GPR2;
 
       // Log("fd = %d", *(int *)(a[1]));
