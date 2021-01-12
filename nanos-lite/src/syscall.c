@@ -6,6 +6,8 @@
 
 extern int _write(int fd, void *buf, size_t count);
 static int program_break;
+extern void naive_uload(PCB *pcb, const char *filename);
+
 
 static inline int do_open(const char * path, int flags, int mode) {
   return fs_open(path, flags, mode);
@@ -47,7 +49,11 @@ _Context* do_syscall(_Context *c) {
   // GPR2 - 4 arg0 - arg3
   // GPRx 返回值
   switch (a[0]) {
-    case SYS_exit: _halt(0); c->GPRx = 0; break;
+    case SYS_exit: 
+      naive_uload(NULL, "/bin/init");
+      _halt(a[1]);
+      // c->GPRx = 0; 
+      break;
     case SYS_yield:  _yield();c->GPRx = 0; break;
     case SYS_open: 
       c->GPRx = fs_open((const char *)(a[1]), a[2], a[3]);
@@ -103,7 +109,12 @@ _Context* do_syscall(_Context *c) {
     case SYS_fstat: break;
     case SYS_time: break;
     case SYS_signal: break;
-    case SYS_execve: break;
+    case SYS_execve: 
+      printf("%s\n", a[1]);
+      naive_uload(NULL, (const char*)a[1]);
+      c->GPR2 = SYS_exit;
+      do_syscall(c);
+      break;
     case SYS_fork: break;
     case SYS_link: break;
     case SYS_unlink: break;

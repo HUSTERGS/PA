@@ -26,7 +26,7 @@ void init_proc() {
 
   Log("Initializing processes...");
   // 测试代码
-  naive_uload(NULL, "/bin/text");
+  naive_uload(NULL, "/bin/init");
   // load program here
 
 }
