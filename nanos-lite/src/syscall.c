@@ -97,7 +97,7 @@ _Context* do_syscall(_Context *c) {
       // #else
       //   return 0;
       // #endif
-      Log("brk");
+      // Log("brk");
       c->GPRx = do_brk(a[1]);
       break;
     case SYS_fstat: break;

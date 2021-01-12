@@ -27,7 +27,7 @@ int main() {
 #endif
 
   init_fs();
-  Log("准备进入main.c -> init_proc()");
+  // Log("准备进入main.c -> init_proc()");
   init_proc();
 
   Log("Finish initialization");
