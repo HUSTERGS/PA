@@ -2,9 +2,10 @@
 #include <amdev.h>
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
-    for(int i = 0; i < len;i++){
-        _putc(((char*)buf)[i]);
-    }
+  printf("进入seiral_write函数");
+  for(int i = 0; i < len;i++){
+    _putc(((char*)buf)[i]);
+  }
   return len;
 }
 
