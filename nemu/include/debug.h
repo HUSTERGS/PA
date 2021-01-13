@@ -6,7 +6,6 @@
 #include <assert.h>
 #include "monitor/log.h"
 
-static int dummy;
 #define Log(format, ...) \
     _Log("\33[1;34m[%s,%d,%s] " format "\33[0m\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__)
@@ -18,7 +17,6 @@ static int dummy;
       fprintf(stderr, __VA_ARGS__); \
       fprintf(stderr, "\33[0m\n"); \
       assert(cond); \
-      dummy = 0; \
     } \
   } while (0)
 
