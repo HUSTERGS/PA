@@ -9,7 +9,8 @@
 #undef DIFF_TEST
 #undef DEBUG
 #endif
-volatile static int dummy = 0;
+volatile static int dummy;
+volatile static int dummy;
 /* You will define this macro in PA2 */
 #define HAS_IOE
 
