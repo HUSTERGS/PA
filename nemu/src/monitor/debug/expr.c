@@ -42,7 +42,7 @@ static struct rule {
   {"\\)", ')'},
   {"0x[0-9a-f]+", TK_HEX_NUM},          // hex nums
   {"[0-9]+", TK_DECI_NUM},           // decimal nums
-  {"\\$[a-zA-Z]{2,3}", TK_REG}, // 寄存器名应该只能是2-3长度的
+  {"\\$[a-zA-Z]{1,3}", TK_REG}, // 寄存器名应该只能是2-3长度的
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
