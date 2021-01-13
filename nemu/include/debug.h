@@ -6,12 +6,10 @@
 #include <assert.h>
 #include "monitor/log.h"
 
-volatile static int dummy;
-
+// volatile static int dummy = 0;
 #define Log(format, ...) \
     _Log("\33[1;34m[%s,%d,%s] " format "\33[0m\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__)
-
 #define Assert(cond, ...) \
   do { \
     if (!(cond)) { \
@@ -20,11 +18,13 @@ volatile static int dummy;
       fprintf(stderr, __VA_ARGS__); \
       fprintf(stderr, "\33[0m\n"); \
       assert(cond); \
+      dummy = 0; \
     } \
   } while (0)
 
 #define panic(...) Assert(0, __VA_ARGS__)
 
 #define TODO() panic("please implement me")
+
 
 #endif
