@@ -8,9 +8,27 @@ const char *regsl[] = {
 };
 
 void isa_reg_display() {
+  for (int i = 0; i < 32; i++) {
+    printf("%-3s = 0x%08x  ", regsl[i], reg_l(i));
+    if ((i+1) % 8 != 0) {
+      printf(", ");
+    } else {
+      printf("\n");
+    }
+  }
 }
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {
-  *success = true;
-  return 0;
+  for (int i = 0; i < 32; i++) {
+    if (!strcmp(s, regsl[i])) {
+      *success = true;
+      return cpu.gpr[i]._32;
+    }
+  }
+  if (!strcmp(s, "pc")) {
+    *success = true;
+    return cpu.pc;
+  }
+  *success = false;
+  return -1;
 }
