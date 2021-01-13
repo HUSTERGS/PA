@@ -34,6 +34,7 @@ static struct rule {
   {"\\*", '*'},         // multi， 考虑到*可能是乘法也可能是解引用，而解引用的优先级要高于乘除法，所以乘号的优先级最高
   {"/", '/'},           // divide
   {"\\+", '+'},         // plus
+  {"\\-", '-'},
   {"==", TK_EQ},         // equal
   {"!=", TK_NTEQ},      // not equal
   {"&&", TK_AND},       // and &&
@@ -42,7 +43,7 @@ static struct rule {
   {"\\)", ')'},
   {"0x[0-9a-f]+", TK_HEX_NUM},          // hex nums
   {"[0-9]+", TK_DECI_NUM},           // decimal nums
-  {"\\$[a-zA-Z]{2,3}", TK_REG}, // 寄存器名应该只能是2-3长度的
+  {"[\\$][a-zA-Z0-9]{1,3}", TK_REG}, // 寄存器名应该只能是2-3长度的
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -88,8 +89,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
         position += substr_len;
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
@@ -178,12 +179,12 @@ bool check_parentheses(int p, int q, bool *bad) {
 // 寻找p,q之间的主符号
 // 从右向左找
 int main_op(int p, int q) {
-  Log("p = %d, q = %d\n", p, q);
+  // Log("p = %d, q = %d\n", p, q);
   int backup = -1;
   for (int i = q; i >= p; i--) {
-    Log("i.type = %d", tokens[i].type);
+    // Log("i.type = %d", tokens[i].type);
     if (tokens[i].type == ')') {
-      Log("监测到反括号%d，开始跳过\n", i);
+      // Log("监测到反括号%d，开始跳过\n", i);
       int count = 1;
       while (--i >= p) {
         if (tokens[i].type == ')') {
@@ -191,7 +192,7 @@ int main_op(int p, int q) {
         } else if (tokens[i].type == '(') {
           count--;
         }
-        Log("当前count = %d\n", count);
+        // Log("当前count = %d\n", count);
         if (count == 0) {
           break;
         }
@@ -213,7 +214,7 @@ int main_op(int p, int q) {
       }
       backup = i;
     } else if (tokens[i].type == '+' || tokens[i].type == '-') {
-      Log("进入这个分支\n");
+      // Log("进入这个分支\n");
       if (backup != -1 && (
         tokens[backup].type == TK_AND || 
         tokens[backup].type == TK_EQ ||
@@ -249,7 +250,7 @@ int main_op(int p, int q) {
       backup = i;
     }
     if (backup != -1) {
-      Log("这一轮循环的的main_op为%d，位置为%d\n", tokens[backup].type, backup);
+      // Log("这一轮循环的的main_op为%d，位置为%d\n", tokens[backup].type, backup);
     }
   }
 
@@ -262,7 +263,7 @@ uint32_t eval(int p, int q, bool *success) {
   bool bad = false;
   if (p > q) {
     *success = false;
-    Log("eval函数：p > q");
+    // Log("eval函数：p > q");
     return -1;
   } else  if (p == q) {
     switch (tokens[p].type)
@@ -291,7 +292,7 @@ uint32_t eval(int p, int q, bool *success) {
       break;
     }
   } else if (check_parentheses(p, q, &bad) == true && !bad) {
-    Log("括号匹配\n");
+    // Log("括号匹配\n");
     return eval(p+1, q-1, success);
   } else {
     if (bad) {
@@ -305,7 +306,7 @@ uint32_t eval(int p, int q, bool *success) {
       Log("求值失败");
       return -1;
     }
-    Log("op位置为%d\n", op);
+    // Log("op位置为%d\n", op);
     if (tokens[op].type == TK_DEREF) {
       // 如果是解引用
       Assert(op == p, "如果main_op计算的结果为解引用，那么解引用必然是第一个");
@@ -368,7 +369,7 @@ uint32_t expr(char *e, bool *success) {
     }
   }
   
-  Log("共有%d个符号\n",nr_token);
+  // Log("共有%d个符号\n",nr_token);
   
   uint32_t result = eval(0, nr_token-1, success);
 

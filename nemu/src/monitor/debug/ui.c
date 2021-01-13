@@ -156,10 +156,10 @@ static int cmd_exp(char * args) {
   bool success = false;
   uint32_t result = expr(args, &success);
   if (success) {
-    printf("结果为%d", result);
+    printf("结果为%d\n", result);
     return 0;
   }
-  Log("cmd_exp: 求值失败");
+  Log("cmd_exp: 求值失败\n");
   return -1;
 }
 

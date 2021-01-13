@@ -103,7 +103,7 @@ void rm_wp(int NO) {
 void print_wps() {
   WP * temp = head;
   while (temp) {
-    printf("WP NO.%d \"%s\" value=%d  ", temp->NO, temp->expr, temp->prev_value);
+    printf("WP NO.%d \"%s\" value=%d\n", temp->NO, temp->expr, temp->prev_value);
     temp = temp->next;
   }
 }
